@@ -1,0 +1,59 @@
+﻿[
+  {
+    "name": "文件资源管理器",
+    "path": "explorer.exe",
+    "args": "e:\\"
+  },
+  {
+    "name": "腾讯QQ",
+    "path": "D:\\Installed\\qq\\Bin\\QQScLauncher.exe",
+    "delay": 10000
+  },
+  {
+    "name": "微信",
+    "path": "D:\\Installed\\wechat\\WeChat.exe",
+    "delay": 10000
+  },
+  {
+    "name": "锐捷",
+    "path": "D:\\Installed\\ruijie\\Ruijie Supplicant\\RuijieSupplicant.exe"
+  },
+  {
+    "name": "v2rayN",
+    "path": "E:\\software\\v2rayN-Core\\v2rayN.exe",
+    "delay": 10000
+  },
+  {
+    "name": "edge浏览器",
+    "path": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "delay": 10000,
+    "args": "https://www.hifini.com/"
+  },
+  {
+    "name": "任务管理器",
+    "path": "C:\\WINDOWS\\system32\\Taskmgr.exe"
+  },
+  {
+    "name": "Todos",
+    "path": "explorer.exe",
+    "delay": 10000,
+    "args": "shell:AppsFolder\\Microsoft.Todos_8wekyb3d8bbwe!App"
+  },
+  {
+    "name": "Outlook",
+    "path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE",
+    "delay": 10000
+  },
+  {
+    "name": "GitAutoCommit",
+    "path": "E:\\Projects\\CSharp\\GitAutoCommit\\GitAutoCommit\\bin\\x64\\Debug\\net6.0-windows\\GitAutoCommit.exe",
+    "delay": 10000,
+    "args": "--times=3"
+  },
+  {
+    "name": "Git Push",
+    "path": "powershell",
+    "delay": 20000,
+    "args": "node 'E:\\Projects\\python\\Utils\\main\\GitTryPush.js' 'E:\\Projects\\CSharp\\GitAutoCommit' 'git push origin master'"
+  }
+]

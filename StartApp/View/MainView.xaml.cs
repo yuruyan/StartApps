@@ -1,0 +1,165 @@
+﻿using CommonUITools.View;
+using ModernWpf.Controls;
+using Newtonsoft.Json;
+using StartApp.Model;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Navigation;
+
+namespace StartApp.View;
+
+public partial class MainView : System.Windows.Controls.Page {
+
+    private const string ConfigurationPath = "Data.json";
+    public static readonly DependencyProperty AppTasksProperty = DependencyProperty.Register("AppTasks", typeof(ObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
+
+    private readonly TaskDialog TaskDialog = new();
+    public ObservableCollection<AppTask> AppTasks {
+        get { return (ObservableCollection<AppTask>)GetValue(AppTasksProperty); }
+        set { SetValue(AppTasksProperty, value); }
+    }
+
+    public MainView() {
+        AppTasks = new();
+        InitializeComponent();
+        LoadConfigurationAsync();
+    }
+
+    /// <summary>
+    /// 读取数据
+    /// </summary>
+    private async void LoadConfigurationAsync() {
+        var appTasks = JsonConvert.DeserializeObject<IList<AppTaskPO>>(await File.ReadAllTextAsync(ConfigurationPath));
+        if (appTasks is null) {
+            return;
+        }
+        // 读取配置，添加到列表
+        foreach (var item in Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks)) {
+            AppTasks.Add(item);
+        }
+    }
+
+    /// <summary>
+    /// 更新数据
+    /// </summary>
+    /// <returns></returns>
+    private Task UpdateConfigurationAsync() {
+        return File.WriteAllTextAsync(
+            ConfigurationPath,
+            JsonConvert.SerializeObject(Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks))
+        );
+    }
+
+    /// <summary>
+    /// 添加任务
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void AddTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+        if (TaskDialog.IsVisible) {
+            return;
+        }
+        TaskDialog.AppTask = new();
+        // 确认添加
+        if (await TaskDialog.ShowAsync() != ContentDialogResult.Primary) {
+            return;
+        }
+        var taskCopy = Mapper.Instance.Map<AppTask>(TaskDialog.AppTask);
+        // 合法性检查
+        if (!IsAppTaskValid(taskCopy)) {
+            CommonUITools.Widget.MessageBox.Error("路径不能为空");
+            return;
+        }
+        // 补全 Name
+        if (string.IsNullOrEmpty(taskCopy.Name)) {
+            taskCopy.Name = Path.GetFileNameWithoutExtension(taskCopy.Path);
+        }
+        AppTasks.Add(taskCopy);
+        UpdateConfigurationAsync();
+    }
+
+    /// <summary>
+    /// 检查 AppTask 是否合法
+    /// </summary>
+    /// <param name="appTask"></param>
+    /// <returns></returns>
+    private bool IsAppTaskValid(AppTask appTask) {
+        return !string.IsNullOrEmpty(appTask.Path);
+    }
+
+    /// <summary>
+    /// 开始运行
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void StartRunningAllTasksClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+
+    }
+
+    /// <summary>
+    /// 运行单个任务
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RunTaskClickHandler(object sender, RoutedEventArgs e) {
+        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
+
+        }
+    }
+
+    /// <summary>
+    /// 移除任务
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void RemoveAppTaskClickHandler(object sender, RoutedEventArgs e) {
+        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
+            WarningDialog warningDialog = WarningDialog.Shared;
+            if (warningDialog.IsVisible) {
+                return;
+            }
+            warningDialog.DetailText = $"是否要删除 '{task.Name}' ？";
+            if (await warningDialog.ShowAsync() != ContentDialogResult.Primary) {
+                return;
+            }
+            AppTasks.Remove(task);
+            UpdateConfigurationAsync();
+        }
+    }
+
+    /// <summary>
+    /// 修改任务
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void ModifyAppTaskClickHandler(object sender, RoutedEventArgs e) {
+        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
+            if (TaskDialog.IsVisible) {
+                return;
+            }
+            TaskDialog.AppTask = Mapper.Instance.Map<AppTask>(task);
+            if (await TaskDialog.ShowAsync() != ContentDialogResult.Primary) {
+                return;
+            }
+            Mapper.Instance.Map(TaskDialog.AppTask, task);
+            UpdateConfigurationAsync();
+        }
+    }
+
+    /// <summary>
+    /// 切换状态
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ToggledHandler(object sender, RoutedEventArgs e) => UpdateConfigurationAsync();
+}
