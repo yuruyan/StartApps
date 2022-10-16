@@ -7,7 +7,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:ui="http://schemas.modernwpf.com/2019"
   xmlns:widget="clr-namespace:StartApp.Widget"
-  Name="Root"
+  Name="MainViewRoot"
   Title="MainView"
   d:DesignHeight="450"
   d:DesignWidth="800"
@@ -64,6 +64,8 @@
             Padding="4,8"
             AppTask="{Binding}"
             Background="Transparent"
+            IsDelayVisible="{Binding IsDelayVisible, ElementName=MainViewRoot}"
+            IsPathVisible="{Binding IsPathVisible, ElementName=MainViewRoot}"
             Toggled="ToggledHandler">
             <widget:AppTaskItem.ContextMenu>
               <ContextMenu>
@@ -73,6 +75,14 @@
                       Foreground="{StaticResource SuccessBackground}"
                       Style="{StaticResource IconFontStyle}"
                       Text="&#xe6c1;" />
+                  </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Click="OpenDirectoryClickHandler" Header="打开文件夹">
+                  <MenuItem.Icon>
+                    <TextBlock
+                      Foreground="#f5a623"
+                      Style="{StaticResource IconFontStyle}"
+                      Text="&#xe660;" />
                   </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Click="ModifyAppTaskClickHandler" Header="修改">

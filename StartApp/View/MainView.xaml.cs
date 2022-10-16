@@ -2,6 +2,7 @@
 using ModernWpf.Controls;
 using Newtonsoft.Json;
 using StartApp.Model;
+using StartApp.Widget;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,18 +20,41 @@ namespace StartApp.View;
 public partial class MainView : System.Windows.Controls.Page {
 
     private const string ConfigurationPath = "Data.json";
+    private const double DelayVisibleThreshold = 520;
+    private const double PathVisibleThreshold = 800;
     public static readonly DependencyProperty AppTasksProperty = DependencyProperty.Register("AppTasks", typeof(ObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
+    public static readonly DependencyProperty IsPathVisibleProperty = DependencyProperty.Register("IsPathVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
+    public static readonly DependencyProperty IsDelayVisibleProperty = DependencyProperty.Register("IsDelayVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
 
     private readonly TaskDialog TaskDialog = new();
     public ObservableCollection<AppTask> AppTasks {
         get { return (ObservableCollection<AppTask>)GetValue(AppTasksProperty); }
         set { SetValue(AppTasksProperty, value); }
     }
+    /// <summary>
+    /// 路径是否可见
+    /// </summary>
+    public bool IsPathVisible {
+        get { return (bool)GetValue(IsPathVisibleProperty); }
+        set { SetValue(IsPathVisibleProperty, value); }
+    }
+    /// <summary>
+    /// 延迟是否可见
+    /// </summary>
+    public bool IsDelayVisible {
+        get { return (bool)GetValue(IsDelayVisibleProperty); }
+        set { SetValue(IsDelayVisibleProperty, value); }
+    }
 
     public MainView() {
         AppTasks = new();
         InitializeComponent();
         LoadConfigurationAsync();
+        App.Current.MainWindow.SizeChanged += (s, e) => {
+            double width = e.NewSize.Width;
+            IsDelayVisible = width > DelayVisibleThreshold;
+            IsPathVisible = width > PathVisibleThreshold;
+        };
     }
 
     /// <summary>
@@ -103,7 +127,6 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private void StartRunningAllTasksClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
-
     }
 
     /// <summary>
@@ -162,4 +185,13 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void ToggledHandler(object sender, RoutedEventArgs e) => UpdateConfigurationAsync();
+
+    /// <summary>
+    /// 打开文件所在位置
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
+
+    }
 }

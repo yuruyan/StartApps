@@ -6,21 +6,48 @@
   xmlns:local="clr-namespace:StartApp.Widget"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:ui="http://schemas.modernwpf.com/2019"
-  Name="Root"
+  Name="AppTaskItemRoot"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
   <Grid>
+    <Grid.Resources>
+      <Style BasedOn="{StaticResource GlobalTextBlockStyle}" TargetType="TextBlock">
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+      </Style>
+      <local:DelayMultiConverter x:Key="DelayMultiConverter" />
+      <local:PathColumnConverter x:Key="PathColumnConverter" />
+      <local:DelayColumnConverter x:Key="DelayColumnConverter" />
+    </Grid.Resources>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition />
-      <ColumnDefinition />
+      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="{Binding Path=IsPathVisible, ElementName=AppTaskItemRoot, Converter={StaticResource PathColumnConverter}}" />
+      <ColumnDefinition Width="{Binding Path=IsDelayVisible, ElementName=AppTaskItemRoot, Converter={StaticResource DelayColumnConverter}}" />
+      <ColumnDefinition Width="120" />
     </Grid.ColumnDefinitions>
-    <TextBlock Text="{Binding AppTask.Name, ElementName=Root}" />
-    <ui:ToggleSwitch
+
+    <!--  应用名  -->
+    <TextBlock Text="{Binding AppTask.Name, ElementName=AppTaskItemRoot}" />
+    <!--  路径  -->
+    <TextBlock
       Grid.Column="1"
-      Width="120"
+      Text="{Binding AppTask.Path, ElementName=AppTaskItemRoot}"
+      Visibility="{Binding IsPathVisible, ElementName=AppTaskItemRoot, Converter={StaticResource HideIfFalseConverter}}" />
+    <!--  延迟  -->
+    <TextBlock Grid.Column="2" Text="{Binding AppTask.Delay, ElementName=AppTaskItemRoot}">
+      <TextBlock.Visibility>
+        <MultiBinding Converter="{StaticResource DelayMultiConverter}">
+          <Binding ElementName="AppTaskItemRoot" Path="IsDelayVisible" />
+          <Binding ElementName="AppTaskItemRoot" Path="AppTask.Delay" />
+        </MultiBinding>
+      </TextBlock.Visibility>
+    </TextBlock>
+    <!--  状态切换  -->
+    <ui:ToggleSwitch
+      Grid.Column="3"
       HorizontalAlignment="Right"
-      IsOn="{Binding AppTask.IsEnabled, ElementName=Root}"
+      IsOn="{Binding AppTask.IsEnabled, ElementName=AppTaskItemRoot}"
       OffContent="未启用"
       OnContent="启用"
       Toggled="ToggledHandler" />

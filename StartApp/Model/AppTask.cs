@@ -8,7 +8,7 @@ namespace StartApp.Model;
 [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class AppTask : DependencyObject {
     public static readonly DependencyProperty IdProperty = DependencyProperty.Register("Id", typeof(int), typeof(AppTask), new PropertyMetadata(0));
-    public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(long), typeof(AppTask), new PropertyMetadata(0L));
+    public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(int), typeof(AppTask), new PropertyMetadata(0));
     public static readonly DependencyProperty NameProperty = DependencyProperty.Register("Name", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
     public static readonly DependencyProperty PathProperty = DependencyProperty.Register("Path", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
     public static readonly DependencyProperty ArgsProperty = DependencyProperty.Register("Args", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
@@ -18,8 +18,8 @@ public class AppTask : DependencyObject {
         get { return (int)GetValue(IdProperty); }
         set { SetValue(IdProperty, value); }
     }
-    public long Delay {
-        get { return (long)GetValue(DelayProperty); }
+    public int Delay {
+        get { return (int)GetValue(DelayProperty); }
         set { SetValue(DelayProperty, value); }
     }
     public string Name {
@@ -44,7 +44,7 @@ public class AppTask : DependencyObject {
 [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class AppTaskPO {
     public int Id { get; set; }
-    public long Delay { get; set; }
+    public int Delay { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Path { get; set; } = string.Empty;
     public string Args { get; set; } = string.Empty;
