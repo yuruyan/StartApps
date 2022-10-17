@@ -212,8 +212,19 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
-        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
-            UIUtils.OpenFileInDirectoryAsync(task.Path);
+        if (sender is FrameworkElement element) {
+            var tasks = AppTaskListBox.SelectedItems;
+            // 多文件
+            if (tasks.Count > 1) {
+                foreach (var item in tasks) {
+                    UIUtils.OpenFileInDirectoryAsync(CommonUtils.NullCheck(item as AppTask).Path);
+                }
+                return;
+            }
+            // 单文件
+            if (element.DataContext is AppTask task) {
+                UIUtils.OpenFileInDirectoryAsync(task.Path);
+            }
         }
     }
 }
