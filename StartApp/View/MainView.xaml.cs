@@ -4,25 +4,22 @@ using ModernWpf.Controls;
 using Newtonsoft.Json;
 using Shared.Model;
 using StartApp.Model;
-using StartApp.Widget;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Navigation;
+using MessageBox = CommonUITools.Widget.MessageBox;
 
 namespace StartApp.View;
 
 public partial class MainView : System.Windows.Controls.Page {
 
     private const string ConfigurationPath = "Data.json";
+    // 启动应用程序
+    private const string StartAppBoootPath = "StartAppBoot.exe";
     private const double DelayVisibleThreshold = 520;
     private const double PathVisibleThreshold = 800;
     public static readonly DependencyProperty AppTasksProperty = DependencyProperty.Register("AppTasks", typeof(ObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
@@ -103,7 +100,7 @@ public partial class MainView : System.Windows.Controls.Page {
         var taskCopy = Mapper.Instance.Map<AppTask>(TaskDialog.AppTask);
         // 合法性检查
         if (!IsAppTaskValid(taskCopy)) {
-            CommonUITools.Widget.MessageBox.Error("路径不能为空");
+            MessageBox.Error("路径不能为空");
             return;
         }
         // 补全 Name
@@ -130,6 +127,22 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private void StartRunningAllTasksClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
+        if (AppTasks.Count == 0) {
+            return;
+        }
+        // 检查文件
+        if (!File.Exists(StartAppBoootPath)) {
+            MessageBox.Error($"{StartAppBoootPath} 丢失");
+            return;
+        }
+        if (!File.Exists(ConfigurationPath)) {
+            MessageBox.Error($"{ConfigurationPath} 丢失");
+            return;
+        }
+        var process = CommonUtils.Try(() => Process.Start(StartAppBoootPath, ConfigurationPath));
+        if (process == null) {
+            MessageBox.Error($"启动程序 {StartAppBoootPath} 失败");
+        }
     }
 
     /// <summary>
@@ -142,7 +155,7 @@ public partial class MainView : System.Windows.Controls.Page {
             try {
                 Process.Start(task.Path, task.Args);
             } catch {
-                CommonUITools.Widget.MessageBox.Error("启动失败");
+                MessageBox.Error("启动失败");
             }
         }
     }
