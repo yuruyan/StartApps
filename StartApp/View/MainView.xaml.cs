@@ -7,6 +7,7 @@ using StartApp.Widget;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -137,7 +138,11 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private void RunTaskClickHandler(object sender, RoutedEventArgs e) {
         if (sender is FrameworkElement element && element.DataContext is AppTask task) {
-
+            try {
+                Process.Start(task.Path, task.Args);
+            } catch {
+                CommonUITools.Widget.MessageBox.Error("启动失败");
+            }
         }
     }
 
