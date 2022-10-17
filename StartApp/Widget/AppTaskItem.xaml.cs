@@ -1,4 +1,5 @@
-﻿using StartApp.Model;
+﻿using CommonUITools.Utils;
+using StartApp.Model;
 using System;
 using System.Globalization;
 using System.Windows;
@@ -44,6 +45,27 @@ public partial class AppTaskItem : UserControl {
     /// <param name="e"></param>
     private void ToggledHandler(object sender, RoutedEventArgs e) {
         Toggled?.Invoke(sender, e);
+    }
+}
+
+/// <summary>
+/// 时间单位
+/// </summary>
+public class TimeUnitConverter : IValueConverter {
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+        double mills = System.Convert.ToDouble(value);
+        return mills switch {
+            0 => 0,
+            < 1000 => $"{mills} ms",
+            < ConstantUtils.OneMinuteMillisecond => $"{mills / 1000:#.##} s",
+            < ConstantUtils.OneHourMillisecond => $"{mills / ConstantUtils.OneMinuteMillisecond:#.##} m",
+            < ConstantUtils.OneDayMillisecond => $"{mills / ConstantUtils.OneHourMillisecond:#.##} h",
+            _ => $"{mills / ConstantUtils.OneDayMillisecond:#.##}",
+        };
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+        throw new NotImplementedException();
     }
 }
 

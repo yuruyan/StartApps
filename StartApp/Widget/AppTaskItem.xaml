@@ -19,6 +19,7 @@
       <local:DelayMultiConverter x:Key="DelayMultiConverter" />
       <local:PathColumnConverter x:Key="PathColumnConverter" />
       <local:DelayColumnConverter x:Key="DelayColumnConverter" />
+      <local:TimeUnitConverter x:Key="TimeUnitConverter" />
     </Grid.Resources>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*" />
@@ -33,9 +34,13 @@
     <TextBlock
       Grid.Column="1"
       Text="{Binding AppTask.Path, ElementName=AppTaskItemRoot}"
+      ToolTip="应用程序路径"
       Visibility="{Binding IsPathVisible, ElementName=AppTaskItemRoot, Converter={StaticResource HideIfFalseConverter}}" />
     <!--  延迟  -->
-    <TextBlock Grid.Column="2" Text="{Binding AppTask.Delay, ElementName=AppTaskItemRoot}">
+    <TextBlock
+      Grid.Column="2"
+      Text="{Binding AppTask.Delay, ElementName=AppTaskItemRoot, Converter={StaticResource TimeUnitConverter}}"
+      ToolTip="延迟时间">
       <TextBlock.Visibility>
         <MultiBinding Converter="{StaticResource DelayMultiConverter}">
           <Binding ElementName="AppTaskItemRoot" Path="IsDelayVisible" />
