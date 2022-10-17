@@ -1,23 +1,13 @@
 ﻿using ModernWpf.Controls;
 using StartApp.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace StartApp.View;
 
 public partial class TaskDialog : ContentDialog {
+    private const double MinContentWidth = 300;
+    private const double MaxContentWidth = 450;
 
     public static readonly DependencyProperty AppTaskProperty = DependencyProperty.Register("AppTask", typeof(AppTask), typeof(TaskDialog), new PropertyMetadata());
     public static readonly DependencyProperty HeaderTagProperty = DependencyProperty.Register("HeaderTag", typeof(string), typeof(TaskDialog), new PropertyMetadata());
@@ -46,6 +36,15 @@ public partial class TaskDialog : ContentDialog {
         InputTag = "InputNormal";
         InputItemPanelTag = "InputItemPanelNormal";
         InitializeComponent();
+        ContentScrollViewer.Width = MinContentWidth;
+        App.Current.MainWindow.SizeChanged += (s, e) => {
+            double newWidth = e.NewSize.Width / 1.5;
+            ContentScrollViewer.Width = newWidth switch {
+                < MinContentWidth => MinContentWidth,
+                > MaxContentWidth => MaxContentWidth,
+                _ => newWidth
+            };
+        };
     }
 
     /// <summary>
