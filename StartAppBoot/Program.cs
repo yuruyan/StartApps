@@ -14,7 +14,7 @@ string configurationFile = args[0];
 if (!File.Exists(configurationFile)) {
     return;
 }
-ICollection<AppTaskPO>? tasks = JsonConvert.DeserializeObject<ICollection<AppTaskPO>>(configurationFile);
+ICollection<AppTaskPO>? tasks = JsonConvert.DeserializeObject<ICollection<AppTaskPO>>(File.ReadAllText(configurationFile));
 // 解析失败
 if (tasks is null) {
     return;
