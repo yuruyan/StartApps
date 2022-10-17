@@ -166,18 +166,28 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void RemoveAppTaskClickHandler(object sender, RoutedEventArgs e) {
-        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
-            WarningDialog warningDialog = WarningDialog.Shared;
-            if (warningDialog.IsVisible) {
-                return;
-            }
-            warningDialog.DetailText = $"是否要删除 '{task.Name}' ？";
-            if (await warningDialog.ShowAsync() != ContentDialogResult.Primary) {
-                return;
-            }
-            AppTasks.Remove(task);
-            UpdateConfigurationAsync();
+        WarningDialog warningDialog = WarningDialog.Shared;
+        if (warningDialog.IsVisible) {
+            return;
         }
+        var selectedTasks = AppTaskListBox.SelectedItems;
+        var detailText = "是否删除选中项？";
+        // 单个 Item
+        if (selectedTasks.Count == 1) {
+            detailText = $"是否要删除 '{CommonUtils.NullCheck(selectedTasks[0] as AppTask).Name}' ？";
+        }
+        warningDialog.DetailText = detailText;
+        // show dialog
+        if (await warningDialog.ShowAsync() != ContentDialogResult.Primary) {
+            return;
+        }
+        // 移除
+        var tasksCopy = new AppTask[selectedTasks.Count];
+        selectedTasks.CopyTo(tasksCopy, 0);
+        foreach (var item in tasksCopy) {
+            AppTasks.Remove(item);
+        }
+        UpdateConfigurationAsync();
     }
 
     /// <summary>
