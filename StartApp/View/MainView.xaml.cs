@@ -212,8 +212,8 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
-        foreach (var item in AppTaskListBox.SelectedItems) {
-            UIUtils.OpenFileInDirectoryAsync(CommonUtils.NullCheck(item as AppTask).Path);
+        foreach (AppTask task in AppTaskListBox.SelectedItems) {
+            UIUtils.OpenFileInDirectoryAsync(task.Path);
         }
     }
 }
