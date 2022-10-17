@@ -36,6 +36,14 @@ public partial class TaskDialog : ContentDialog {
         InputTag = "InputNormal";
         InputItemPanelTag = "InputItemPanelNormal";
         InitializeComponent();
+        InitContentScrollViewer();
+    }
+
+    /// <summary>
+    /// 初始化 ContentScrollViewer
+    /// </summary>
+    private void InitContentScrollViewer() {
+        // 随窗口大小变化，改变 ContentScrollViewer 宽度
         ContentScrollViewer.Width = MinContentWidth;
         App.Current.MainWindow.SizeChanged += (s, e) => {
             double newWidth = e.NewSize.Width / 1.5;
