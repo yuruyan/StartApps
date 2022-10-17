@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Windows;
 using AutoMapper;
+using Shared.Model;
 
 namespace StartApp.Model;
 
@@ -39,16 +40,6 @@ public class AppTask : DependencyObject {
         set { SetValue(IsEnabledProperty, value); }
     }
 
-}
-
-[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
-public class AppTaskPO {
-    public int Id { get; set; }
-    public int Delay { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Path { get; set; } = string.Empty;
-    public string Args { get; set; } = string.Empty;
-    public bool IsEnabled { get; set; }
 }
 
 public class AppTaskProfile : Profile {

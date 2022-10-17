@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartApp", "StartApp\StartApp.csproj", "{1BA44327-FB9A-4F47-BFA6-6632A824BF0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StartApp", "StartApp\StartApp.csproj", "{1BA44327-FB9A-4F47-BFA6-6632A824BF0D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUITools", "..\CommonUITools\CommonUITools\CommonUITools.csproj", "{004B822D-3741-4434-8402-29368E33739B}"
 EndProject
@@ -12,7 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{17C4FA48-6CF0-4737-9772-D1DF082E99B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{17C4FA48-6CF0-4737-9772-D1DF082E99B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartAppBoot", "StartAppBoot\StartAppBoot.csproj", "{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{036B64DE-910D-42AA-BDF7-61FEA921F840}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +50,22 @@ Global
 		{17C4FA48-6CF0-4737-9772-D1DF082E99B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{17C4FA48-6CF0-4737-9772-D1DF082E99B2}.Release|x64.ActiveCfg = Release|Any CPU
 		{17C4FA48-6CF0-4737-9772-D1DF082E99B2}.Release|x64.Build.0 = Release|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Debug|x64.Build.0 = Debug|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Release|x64.ActiveCfg = Release|Any CPU
+		{A2E280B8-82CD-48B8-AD34-B51F7EF1920A}.Release|x64.Build.0 = Release|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Debug|x64.Build.0 = Debug|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Release|Any CPU.Build.0 = Release|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Release|x64.ActiveCfg = Release|Any CPU
+		{036B64DE-910D-42AA-BDF7-61FEA921F840}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

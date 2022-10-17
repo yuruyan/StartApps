@@ -2,6 +2,7 @@
 using CommonUITools.View;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
+using Shared.Model;
 using StartApp.Model;
 using StartApp.Widget;
 using System;
