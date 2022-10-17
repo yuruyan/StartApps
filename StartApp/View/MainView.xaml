@@ -86,11 +86,37 @@
                       Text="&#xe660;" />
                   </MenuItem.Icon>
                 </MenuItem>
+                <!--  无多项操作  -->
                 <MenuItem Click="ModifyAppTaskClickHandler" Header="修改">
                   <MenuItem.Icon>
                     <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe698;" />
                   </MenuItem.Icon>
                 </MenuItem>
+                <!--  Enable  -->
+                <MenuItem
+                  Click="EnableTaskClickHandler"
+                  Header="启用"
+                  Loaded="EnableTaskMenuItemLoaded">
+                  <MenuItem.Icon>
+                    <TextBlock
+                      Foreground="{StaticResource SuccessBackground}"
+                      Style="{StaticResource IconFontStyle}"
+                      Text="&#xe662;" />
+                  </MenuItem.Icon>
+                </MenuItem>
+                <!--  Disable  -->
+                <MenuItem
+                  Click="DisableTaskClickHandler"
+                  Header="禁用"
+                  Loaded="DisableTaskMenuItemLoaded">
+                  <MenuItem.Icon>
+                    <TextBlock
+                      Foreground="{StaticResource ErrorBackground}"
+                      Style="{StaticResource IconFontStyle}"
+                      Text="&#xe661;" />
+                  </MenuItem.Icon>
+                </MenuItem>
+                <!--  删除  -->
                 <MenuItem Click="RemoveAppTaskClickHandler" Header="删除">
                   <MenuItem.Icon>
                     <TextBlock
@@ -99,8 +125,6 @@
                       Text="&#xe6b4;" />
                   </MenuItem.Icon>
                 </MenuItem>
-                <!--  多选操作  -->
-
               </ContextMenu>
             </widget:AppTaskItem.ContextMenu>
           </widget:AppTaskItem>

@@ -8,9 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using MessageBox = CommonUITools.Widget.MessageBox;
 
 namespace StartApp.View;
@@ -224,6 +226,62 @@ public partial class MainView : System.Windows.Controls.Page {
     private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
         foreach (AppTask task in AppTaskListBox.SelectedItems) {
             UIUtils.OpenFileInDirectoryAsync(task.Path);
+        }
+    }
+
+    /// <summary>
+    /// 切换为 Enabled
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void EnableTaskClickHandler(object sender, RoutedEventArgs e) {
+        foreach (AppTask item in AppTaskListBox.SelectedItems) {
+            item.IsEnabled = true;
+        }
+    }
+
+    /// <summary>
+    /// 切换为 Disabled
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void DisableTaskClickHandler(object sender, RoutedEventArgs e) {
+        foreach (AppTask item in AppTaskListBox.SelectedItems) {
+            item.IsEnabled = false;
+        }
+    }
+
+    /// <summary>
+    /// 设置 EnableTaskMenuItem Visibility
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void EnableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
+        if (sender is FrameworkElement element) {
+            // 多个 Item
+            if (AppTaskListBox.SelectedItems.Count > 1) {
+                element.Visibility = Visibility.Visible;
+                return;
+            }
+            bool isEnabled = CommonUtils.NullCheck(AppTaskListBox.SelectedItem as AppTask).IsEnabled;
+            element.Visibility = isEnabled ? Visibility.Collapsed : Visibility.Visible;
+        }
+    }
+
+    /// <summary>
+    /// 设置 DisableTaskMenuItem Visibility
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void DisableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
+        if (sender is FrameworkElement element) {
+            // 多个 Item
+            if (AppTaskListBox.SelectedItems.Count > 1) {
+                element.Visibility = Visibility.Visible;
+                return;
+            }
+            bool isEnabled = CommonUtils.NullCheck(AppTaskListBox.SelectedItem as AppTask).IsEnabled;
+            element.Visibility = !isEnabled ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }
