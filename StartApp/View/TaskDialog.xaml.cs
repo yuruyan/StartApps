@@ -1,5 +1,7 @@
-﻿using ModernWpf.Controls;
+﻿using Microsoft.Win32;
+using ModernWpf.Controls;
 using StartApp.Model;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -64,5 +66,26 @@ public partial class TaskDialog : ContentDialog {
         if (e.Key == Key.Enter) {
             e.Handled = true;
         }
+    }
+
+    /// <summary>
+    /// 修改任务路径
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OpenTaskDirectoryMouseUpHandler(object sender, MouseButtonEventArgs e) {
+        e.Handled = true;
+        var dialog = new OpenFileDialog {
+            Filter = "可执行程序|*.exe|全部文件|*.*",
+        };
+        // 设置文件路径
+        if (File.Exists(AppTask.Path)) {
+            dialog.InitialDirectory = new FileInfo(AppTask.Path).DirectoryName;
+            dialog.FileName = Path.GetFileName(AppTask.Path);
+        }
+        if (dialog.ShowDialog() != true) {
+            return;
+        }
+        AppTask.Path = dialog.FileName;
     }
 }

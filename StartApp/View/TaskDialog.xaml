@@ -71,7 +71,22 @@
         <TextBox Text="{Binding AppTask.Name}" />
       </StackPanel>
       <StackPanel>
-        <TextBlock Text="路径" />
+        <TextBlock
+          MouseUp="OpenTaskDirectoryMouseUpHandler"
+          Text="路径"
+          ToolTip="选择可执行文件">
+          <TextBlock.Style>
+            <Style BasedOn="{StaticResource GlobalTextBlockStyle}" TargetType="TextBlock">
+              <Setter Property="Tag" Value="{Binding HeaderTag}" />
+              <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                  <Setter Property="TextDecorations" Value="Underline" />
+                  <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+              </Style.Triggers>
+            </Style>
+          </TextBlock.Style>
+        </TextBlock>
         <TextBox Text="{Binding AppTask.Path}" />
       </StackPanel>
       <StackPanel>
