@@ -151,11 +151,11 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void RunTaskClickHandler(object sender, RoutedEventArgs e) {
-        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
+        foreach (AppTask task in AppTaskListBox.SelectedItems) {
             try {
                 Process.Start(task.Path, task.Args);
             } catch {
-                MessageBox.Error("启动失败");
+                MessageBox.Error($"'{task.Name}' 启动失败");
             }
         }
     }
