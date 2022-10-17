@@ -43,7 +43,14 @@ foreach (var item in tasks) {
             if (process is null) {
                 throw new Exception("Start process failed");
             }
-            Logger.Debug(process.StandardOutput.ReadToEnd());
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+            if (!string.IsNullOrEmpty(error)) {
+                Logger.Debug(process.StandardError.ReadToEnd());
+            }
+            if (!string.IsNullOrEmpty(output)) {
+                Logger.Debug(process.StandardOutput.ReadToEnd());
+            }
         } catch (Exception error) {
             Logger.Error($"Start process '{item.Name}' failed");
             Logger.Error($"\t{error.Message}");
