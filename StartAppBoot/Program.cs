@@ -14,15 +14,17 @@ string configurationFile = args[0];
 if (!File.Exists(configurationFile)) {
     return;
 }
-var tasks = JsonConvert.DeserializeObject<ICollection<AppTaskPO>>(configurationFile);
+ICollection<AppTaskPO>? tasks = JsonConvert.DeserializeObject<ICollection<AppTaskPO>>(configurationFile);
 // 解析失败
 if (tasks is null) {
     return;
 }
+// 筛选
+tasks = tasks.Where(task => task.IsEnabled).ToList();
 var runningTasks = new Task[tasks.Count];
 int i = 0;
 foreach (var item in tasks) {
-    runningTasks[i] = Task.Run(() => {
+    runningTasks[i++] = Task.Run(() => {
         // 延迟执行
         if (item.Delay > 0) {
             Thread.Sleep(item.Delay);
