@@ -1,4 +1,5 @@
-﻿using CommonUITools.View;
+﻿using CommonUITools.Utils;
+using CommonUITools.View;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
 using StartApp.Model;
@@ -192,6 +193,8 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
-
+        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
+            UIUtils.OpenFileInDirectoryAsync(task.Path);
+        }
     }
 }
