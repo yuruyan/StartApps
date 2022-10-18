@@ -176,7 +176,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void RunAsAdminClickHandler(object sender, RoutedEventArgs e) {
+    private void StartRunningAllTasksAsAdminClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
         // 检查
         if (!CheckRunningTask()) {

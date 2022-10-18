@@ -34,7 +34,7 @@
         <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
       </StackPanel.Resources>
       <!--  以管理员身份运行  -->
-      <Button Click="RunAsAdminClickHandler" ToolTip="以管理员身份运行">
+      <Button Click="StartRunningAllTasksAsAdminClickHandler" ToolTip="以管理员身份运行">
         <Button.Content>
           <TextBlock Foreground="{StaticResource ErrorBackground}" Text="&#xe670;" />
         </Button.Content>
