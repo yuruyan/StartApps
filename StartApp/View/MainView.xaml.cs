@@ -8,12 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using MessageBox = CommonUITools.Widget.MessageBox;
 
 namespace StartApp.View;
@@ -23,7 +21,6 @@ public partial class MainView : System.Windows.Controls.Page {
     private const string ConfigurationPath = "Data.json";
     // 启动应用程序
     private const string StartAppBootPath = "StartAppBoot.exe";
-    private const string StartAppAdminPath = "StartApp-Admin.exe";
     private const double DelayVisibleThreshold = 520;
     private const double PathVisibleThreshold = 800;
     public static readonly DependencyProperty AppTasksProperty = DependencyProperty.Register("AppTasks", typeof(ObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
@@ -318,12 +315,11 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private void RunAsAdminClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
-        // 文件丢失
-        if (!File.Exists(StartAppAdminPath)) {
-            MessageBox.Error($"文件 '{StartAppAdminPath}' 找不到！");
-            return;
-        }
-        var process = CommonUtils.Try(() => Process.Start(StartAppAdminPath));
+        var process = CommonUtils.Try(() => Process.Start(new ProcessStartInfo {
+            FileName = Process.GetCurrentProcess().MainModule.FileName,
+            UseShellExecute = true,
+            Verb = "RunAs"
+        }));
         if (process != null) {
             App.Current.Shutdown();
             return;
