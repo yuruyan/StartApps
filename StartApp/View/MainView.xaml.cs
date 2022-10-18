@@ -21,7 +21,7 @@ public partial class MainView : System.Windows.Controls.Page {
 
     private const string ConfigurationPath = "Data.json";
     // 启动应用程序
-    private const string StartAppBoootPath = "StartAppBoot.exe";
+    private const string StartAppBootPath = "StartAppBoot.exe";
     private const double DelayVisibleThreshold = 520;
     private const double PathVisibleThreshold = 800;
     public static readonly DependencyProperty AppTasksProperty = DependencyProperty.Register("AppTasks", typeof(ObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
@@ -133,17 +133,17 @@ public partial class MainView : System.Windows.Controls.Page {
             return;
         }
         // 检查文件
-        if (!File.Exists(StartAppBoootPath)) {
-            MessageBox.Error($"{StartAppBoootPath} 丢失");
+        if (!File.Exists(StartAppBootPath)) {
+            MessageBox.Error($"{StartAppBootPath} 丢失");
             return;
         }
         if (!File.Exists(ConfigurationPath)) {
             MessageBox.Error($"{ConfigurationPath} 丢失");
             return;
         }
-        var process = CommonUtils.Try(() => Process.Start(StartAppBoootPath, ConfigurationPath));
+        var process = CommonUtils.Try(() => Process.Start(StartAppBootPath, ConfigurationPath));
         if (process == null) {
-            MessageBox.Error($"启动程序 {StartAppBoootPath} 失败");
+            MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
         }
     }
 
