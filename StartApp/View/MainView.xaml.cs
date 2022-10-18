@@ -141,19 +141,54 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private void StartRunningAllTasksClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
-        if (AppTasks.Count == 0) {
+        // 检查
+        if (!CheckRunningTask()) {
             return;
+        }
+        var process = CommonUtils.Try(() => Process.Start(StartAppBootPath, ConfigurationPath));
+        if (process == null) {
+            MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
+        }
+    }
+
+    /// <summary>
+    /// 检查开始运行任务条件，with Notification
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckRunningTask() {
+        if (AppTasks.Count == 0) {
+            return false;
         }
         // 检查文件
         if (!File.Exists(StartAppBootPath)) {
             MessageBox.Error($"{StartAppBootPath} 丢失");
-            return;
+            return false;
         }
         if (!File.Exists(ConfigurationPath)) {
             MessageBox.Error($"{ConfigurationPath} 丢失");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// 以管理员身份运行
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RunAsAdminClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+        // 检查
+        if (!CheckRunningTask()) {
             return;
         }
-        var process = CommonUtils.Try(() => Process.Start(StartAppBootPath, ConfigurationPath));
+        var process = CommonUtils.Try(() => Process.Start(new ProcessStartInfo {
+            FileName = StartAppBootPath,
+            Arguments = ConfigurationPath,
+            UseShellExecute = true,
+            Verb = "RunAs"
+        }));
+        // 失败
         if (process == null) {
             MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
         }
@@ -306,25 +341,5 @@ public partial class MainView : System.Windows.Controls.Page {
             bool isEnabled = CommonUtils.NullCheck(AppTaskListBox.SelectedItem as AppTask).IsEnabled;
             element.Visibility = !isEnabled ? Visibility.Collapsed : Visibility.Visible;
         }
-    }
-
-    /// <summary>
-    /// 以管理员身份运行
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void RunAsAdminClickHandler(object sender, RoutedEventArgs e) {
-        e.Handled = true;
-        var process = CommonUtils.Try(() => Process.Start(new ProcessStartInfo {
-            FileName = Process.GetCurrentProcess().MainModule.FileName,
-            UseShellExecute = true,
-            Verb = "RunAs"
-        }));
-        if (process != null) {
-            App.Current.Shutdown();
-            return;
-        }
-        // 失败
-        MessageBox.Error("以管理员身份运行启动失败");
     }
 }

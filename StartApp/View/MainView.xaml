@@ -34,12 +34,9 @@
         <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
       </StackPanel.Resources>
       <!--  以管理员身份运行  -->
-      <Button
-        Click="RunAsAdminClickHandler"
-        ToolTip="以管理员身份运行"
-        Visibility="{Binding IsStartedAsAdmin, Converter={StaticResource HideIfTrueConverter}}">
+      <Button Click="RunAsAdminClickHandler" ToolTip="以管理员身份运行">
         <Button.Content>
-          <TextBlock Text="&#xe689;" />
+          <TextBlock Foreground="{StaticResource ErrorBackground}" Text="&#xe670;" />
         </Button.Content>
       </Button>
       <!--  开始运行  -->
