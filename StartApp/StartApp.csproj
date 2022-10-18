@@ -10,10 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\CommonUITools-IconFont.ttf" />
     <None Remove="Resource\iconfont.ttf" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resource\CommonUITools-IconFont.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resource\iconfont.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
