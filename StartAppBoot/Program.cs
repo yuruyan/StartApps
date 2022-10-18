@@ -4,14 +4,16 @@ using Shared.Model;
 using System.Diagnostics;
 
 Logger Logger = LogManager.GetCurrentClassLogger();
+string DefaultConfigurationFile = "Data.json";
+string configurationFile = DefaultConfigurationFile;
 
-// 检查参数
-if (args.Length < 1) {
-    return;
+// file 参数
+if (args.Length > 0) {
+    configurationFile = args[0];
 }
-string configurationFile = args[0];
 // 文件不存在
 if (!File.Exists(configurationFile)) {
+    Logger.Error($"文件 '{configurationFile}' 不存在");
     return;
 }
 ICollection<AppTaskPO>? tasks = JsonConvert.DeserializeObject<ICollection<AppTaskPO>>(File.ReadAllText(configurationFile));
@@ -23,6 +25,7 @@ if (tasks is null) {
 tasks = tasks.Where(task => task.IsEnabled).ToList();
 var runningTasks = new Task[tasks.Count];
 int i = 0;
+// 执行
 foreach (var item in tasks) {
     runningTasks[i++] = Task.Run(() => {
         // 延迟执行
