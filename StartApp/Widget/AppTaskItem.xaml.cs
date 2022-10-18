@@ -44,6 +44,7 @@ public partial class AppTaskItem : UserControl {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void ToggledHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         Toggled?.Invoke(sender, e);
     }
 }

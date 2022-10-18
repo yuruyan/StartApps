@@ -168,6 +168,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void RunTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         foreach (AppTask task in AppTaskListBox.SelectedItems) {
             try {
                 Process.Start(task.Path, task.Args);
@@ -183,6 +184,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void RemoveAppTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         WarningDialog warningDialog = WarningDialog.Shared;
         if (warningDialog.IsVisible) {
             return;
@@ -213,6 +215,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void ModifyAppTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         if (sender is FrameworkElement element && element.DataContext is AppTask task) {
             if (TaskDialog.IsVisible) {
                 return;
@@ -231,7 +234,10 @@ public partial class MainView : System.Windows.Controls.Page {
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ToggledHandler(object sender, RoutedEventArgs e) => UpdateConfigurationAsync();
+    private void ToggledHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+        UpdateConfigurationAsync();
+    }
 
     /// <summary>
     /// 打开文件所在位置
@@ -239,6 +245,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         foreach (AppTask task in AppTaskListBox.SelectedItems) {
             UIUtils.OpenFileInDirectoryAsync(task.Path);
         }
@@ -250,6 +257,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void EnableTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         foreach (AppTask item in AppTaskListBox.SelectedItems) {
             item.IsEnabled = true;
         }
@@ -261,6 +269,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void DisableTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         foreach (AppTask item in AppTaskListBox.SelectedItems) {
             item.IsEnabled = false;
         }
@@ -272,6 +281,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void EnableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         if (sender is FrameworkElement element) {
             // 多个 Item
             if (AppTaskListBox.SelectedItems.Count > 1) {
@@ -289,6 +299,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void DisableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
+        e.Handled = true;
         if (sender is FrameworkElement element) {
             // 多个 Item
             if (AppTaskListBox.SelectedItems.Count > 1) {
