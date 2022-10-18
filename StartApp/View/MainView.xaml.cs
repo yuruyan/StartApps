@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -22,11 +23,13 @@ public partial class MainView : System.Windows.Controls.Page {
     private const string ConfigurationPath = "Data.json";
     // 启动应用程序
     private const string StartAppBootPath = "StartAppBoot.exe";
+    private const string StartAppAdminPath = "StartApp-Admin.exe";
     private const double DelayVisibleThreshold = 520;
     private const double PathVisibleThreshold = 800;
     public static readonly DependencyProperty AppTasksProperty = DependencyProperty.Register("AppTasks", typeof(ObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
     public static readonly DependencyProperty IsPathVisibleProperty = DependencyProperty.Register("IsPathVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
     public static readonly DependencyProperty IsDelayVisibleProperty = DependencyProperty.Register("IsDelayVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
+    public static readonly DependencyProperty IsStartedAsAdminProperty = DependencyProperty.Register("IsStartedAsAdmin", typeof(bool), typeof(MainView), new PropertyMetadata(false));
 
     private readonly TaskDialog TaskDialog = new();
     public ObservableCollection<AppTask> AppTasks {
@@ -47,11 +50,23 @@ public partial class MainView : System.Windows.Controls.Page {
         get { return (bool)GetValue(IsDelayVisibleProperty); }
         set { SetValue(IsDelayVisibleProperty, value); }
     }
+    /// <summary>
+    /// 是否以管理员身份运行
+    /// </summary>
+    public bool IsStartedAsAdmin {
+        get { return (bool)GetValue(IsStartedAsAdminProperty); }
+        set { SetValue(IsStartedAsAdminProperty, value); }
+    }
 
     public MainView() {
         AppTasks = new();
         InitializeComponent();
         LoadConfigurationAsync();
+        #region 设置 IsStartedAsAdmin
+        WindowsIdentity identity = WindowsIdentity.GetCurrent();
+        WindowsPrincipal principal = new(identity);
+        IsStartedAsAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+        #endregion
         App.Current.MainWindow.SizeChanged += (s, e) => {
             double width = e.NewSize.Width;
             IsDelayVisible = width > DelayVisibleThreshold;
@@ -283,5 +298,26 @@ public partial class MainView : System.Windows.Controls.Page {
             bool isEnabled = CommonUtils.NullCheck(AppTaskListBox.SelectedItem as AppTask).IsEnabled;
             element.Visibility = !isEnabled ? Visibility.Collapsed : Visibility.Visible;
         }
+    }
+
+    /// <summary>
+    /// 以管理员身份运行
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void RunAsAdminClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+        // 文件丢失
+        if (!File.Exists(StartAppAdminPath)) {
+            MessageBox.Error($"文件 '{StartAppAdminPath}' 找不到！");
+            return;
+        }
+        var process = CommonUtils.Try(() => Process.Start(StartAppAdminPath));
+        if (process != null) {
+            App.Current.Shutdown();
+            return;
+        }
+        // 失败
+        MessageBox.Error("以管理员身份运行启动失败");
     }
 }

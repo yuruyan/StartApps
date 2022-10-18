@@ -33,17 +33,25 @@
         <Style BasedOn="{StaticResource GlobalSingleIconButtonStyle}" TargetType="Button" />
         <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
       </StackPanel.Resources>
-      <Button Click="StartRunningAllTasksClickHandler" ToolTip="开始运行">
+      <!--  以管理员身份运行  -->
+      <Button
+        Click="RunAsAdminClickHandler"
+        ToolTip="以管理员身份运行"
+        Visibility="{Binding IsStartedAsAdmin, Converter={StaticResource HideIfTrueConverter}}">
         <Button.Content>
-          <TextBlock
-            Foreground="{StaticResource SuccessBackground}"
-            Text="&#xe670;"
-            ToolTip="开始运行" />
+          <TextBlock Text="&#xe689;" />
         </Button.Content>
       </Button>
+      <!--  开始运行  -->
+      <Button Click="StartRunningAllTasksClickHandler" ToolTip="开始运行">
+        <Button.Content>
+          <TextBlock Foreground="{StaticResource SuccessBackground}" Text="&#xe670;" />
+        </Button.Content>
+      </Button>
+      <!--  添加任务  -->
       <Button Click="AddTaskClickHandler" ToolTip="添加任务">
         <Button.Content>
-          <TextBlock Text="&#xe604;" ToolTip="添加任务" />
+          <TextBlock Text="&#xe604;" />
         </Button.Content>
       </Button>
     </StackPanel>
