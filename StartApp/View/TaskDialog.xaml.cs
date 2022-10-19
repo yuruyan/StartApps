@@ -87,5 +87,9 @@ public partial class TaskDialog : ContentDialog {
             return;
         }
         AppTask.Path = dialog.FileName;
+        // 自动填充 Name
+        if (string.IsNullOrEmpty(AppTask.Name)) {
+            AppTask.Name = Path.GetFileNameWithoutExtension(AppTask.Path);
+        }
     }
 }
