@@ -20,6 +20,7 @@
       <local:PathColumnConverter x:Key="PathColumnConverter" />
       <local:DelayColumnConverter x:Key="DelayColumnConverter" />
       <local:TimeUnitConverter x:Key="TimeUnitConverter" />
+      <local:IconConverter x:Key="IconConverter" />
     </Grid.Resources>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*" />
@@ -28,8 +29,16 @@
       <ColumnDefinition Width="120" />
     </Grid.ColumnDefinitions>
 
-    <!--  应用名  -->
-    <TextBlock Text="{Binding AppTask.Name, ElementName=AppTaskItemRoot}" />
+    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="4">
+      <!--  应用程序图标  -->
+      <Image
+        Width="20"
+        Height="20"
+        Source="{Binding AppTask.Path, ElementName=AppTaskItemRoot, Converter={StaticResource IconConverter}}"
+        Stretch="Uniform" />
+      <!--  应用名  -->
+      <TextBlock Text="{Binding AppTask.Name, ElementName=AppTaskItemRoot}" />
+    </ui:SimpleStackPanel>
     <!--  路径  -->
     <TextBlock
       Grid.Column="1"

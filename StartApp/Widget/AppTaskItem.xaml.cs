@@ -1,10 +1,13 @@
 ﻿using CommonUITools.Utils;
 using StartApp.Model;
+using StartApp.Util;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace StartApp.Widget;
 
@@ -46,6 +49,39 @@ public partial class AppTaskItem : UserControl {
     private void ToggledHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
         Toggled?.Invoke(sender, e);
+    }
+}
+
+/// <summary>
+/// 程序图标
+/// </summary>
+public class IconConverter : IValueConverter {
+    /// <summary>
+    /// Convert
+    /// </summary>
+    /// <param name="value">AppTask.Path</param>
+    /// <param name="targetType"></param>
+    /// <param name="parameter"></param>
+    /// <param name="culture"></param>
+    /// <returns></returns>
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+        // 不合法
+        if (value == null || value is not string || !File.Exists(value as string)) {
+            return null;
+        }
+        Stream? stream = Utils.GetExeBitmap(value as string);
+        if (stream == null) {
+            return null;
+        }
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.StreamSource = stream;
+        bitmapImage.EndInit();
+        return bitmapImage;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+        throw new NotImplementedException();
     }
 }
 
