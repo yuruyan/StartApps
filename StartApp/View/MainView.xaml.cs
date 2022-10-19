@@ -262,7 +262,10 @@ public partial class MainView : System.Windows.Controls.Page {
             return;
         }
         var selectedTasks = AppTaskListBox.SelectedItems;
-        var detailText = "是否删除选中项？";
+        if (selectedTasks.Count == 0) {
+            return;
+        }
+        var detailText = $"是否删除这 {selectedTasks.Count} 项？";
         // 单个 Item
         if (selectedTasks.Count == 1) {
             detailText = $"是否要删除 '{CommonUtils.NullCheck(selectedTasks[0] as AppTask).Name}' ？";
@@ -278,6 +281,7 @@ public partial class MainView : System.Windows.Controls.Page {
         foreach (var item in tasksCopy) {
             AppTasks.Remove(item);
         }
+        MessageBox.Success("删除成功");
         UpdateConfigurationAsync();
     }
 
