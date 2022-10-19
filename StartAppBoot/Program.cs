@@ -38,21 +38,10 @@ foreach (var item in tasks) {
             var process = Process.Start(new ProcessStartInfo {
                 FileName = item.Path,
                 Arguments = item.Args,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
             });
             // 失败
             if (process is null) {
                 throw new Exception("Start process failed");
-            }
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-            if (!string.IsNullOrEmpty(error)) {
-                Logger.Debug(process.StandardError.ReadToEnd());
-            }
-            if (!string.IsNullOrEmpty(output)) {
-                Logger.Debug(process.StandardOutput.ReadToEnd());
             }
         } catch (Exception error) {
             Logger.Error($"Start process '{item.Name}' failed");
