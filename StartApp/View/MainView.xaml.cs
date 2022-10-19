@@ -406,6 +406,32 @@ public partial class MainView : System.Windows.Controls.Page {
     }
 
     /// <summary>
+    /// 获取选中项 enable 状态
+    /// </summary>
+    /// <returns></returns>
+    private SelectedItemsEnableState GetSelectedItemsEnableState() {
+        int selectedCount = 0, unSelectedCount = 0;
+        var selectedItems = AppTaskListBox.SelectedItems;
+        if (selectedItems.Count == 0) {
+            return SelectedItemsEnableState.Mixed;
+        }
+        foreach (AppTask item in selectedItems) {
+            if (item.IsEnabled) {
+                selectedCount++;
+            } else {
+                unSelectedCount++;
+            }
+        }
+        if (selectedCount == selectedItems.Count) {
+            return SelectedItemsEnableState.AllEnabled;
+        }
+        if (unSelectedCount == selectedItems.Count) {
+            return SelectedItemsEnableState.AllDisabled;
+        }
+        return SelectedItemsEnableState.Mixed;
+    }
+
+    /// <summary>
     /// 设置 EnableTaskMenuItem Visibility
     /// </summary>
     /// <param name="sender"></param>
@@ -413,6 +439,11 @@ public partial class MainView : System.Windows.Controls.Page {
     private void EnableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
         e.Handled = true;
         if (sender is FrameworkElement element) {
+            // 全部 enabled
+            if (GetSelectedItemsEnableState() == SelectedItemsEnableState.AllEnabled) {
+                element.Visibility = Visibility.Collapsed;
+                return;
+            }
             // 多个 Item
             if (AppTaskListBox.SelectedItems.Count > 1) {
                 element.Visibility = Visibility.Visible;
@@ -431,6 +462,11 @@ public partial class MainView : System.Windows.Controls.Page {
     private void DisableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
         e.Handled = true;
         if (sender is FrameworkElement element) {
+            // 全部 disabled
+            if (GetSelectedItemsEnableState() == SelectedItemsEnableState.AllDisabled) {
+                element.Visibility = Visibility.Collapsed;
+                return;
+            }
             // 多个 Item
             if (AppTaskListBox.SelectedItems.Count > 1) {
                 element.Visibility = Visibility.Visible;
@@ -487,4 +523,22 @@ public partial class MainView : System.Windows.Controls.Page {
         }
     }
 
+}
+
+/// <summary>
+/// 选中项 enable 状态
+/// </summary>
+internal enum SelectedItemsEnableState {
+    /// <summary>
+    /// enabled 都为 true
+    /// </summary>
+    AllEnabled,
+    /// <summary>
+    /// enabled 都为 false
+    /// </summary>
+    AllDisabled,
+    /// <summary>
+    /// 混合
+    /// </summary>
+    Mixed
 }
