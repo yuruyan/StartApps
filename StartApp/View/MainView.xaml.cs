@@ -235,7 +235,7 @@ public partial class MainView : System.Windows.Controls.Page {
     }
 
     /// <summary>
-    /// 运行选中项任务
+    /// 立即运行选中项任务
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -247,6 +247,49 @@ public partial class MainView : System.Windows.Controls.Page {
             } catch {
                 MessageBox.Error($"'{task.Name}' 启动失败");
             }
+        }
+    }
+
+    /// <summary>
+    /// 以管理员身份运行
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void RunTaskAsAdminClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+        // 检查
+        if (!CheckRunningTask()) {
+            return;
+        }
+        var selectedTasks = AppTaskListBox.SelectedItems;
+        // 意外情况
+        if (selectedTasks.Count == 0) {
+            return;
+        }
+        #region 写入临时文件
+        var tasksCopy = new AppTask[selectedTasks.Count];
+        selectedTasks.CopyTo(tasksCopy, 0);
+        var poList = Mapper.Instance.Map<IEnumerable<AppTaskPO>>(tasksCopy);
+        // 立即运行设置
+        foreach (AppTaskPO po in poList) {
+            po.Delay = 0;
+            po.IsEnabled = true;
+        }
+        string jsonData = JsonConvert.SerializeObject(poList);
+        string tempConfigFile = "tempConfig.json";
+        // 写入临时文件
+        await File.WriteAllTextAsync(tempConfigFile, jsonData);
+        #endregion
+        // 启动 StartAppBoot
+        var process = CommonUtils.Try(() => Process.Start(new ProcessStartInfo {
+            FileName = StartAppBootPath,
+            Arguments = tempConfigFile,
+            UseShellExecute = true,
+            Verb = "RunAs"
+        }));
+        // 失败
+        if (process == null) {
+            MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
         }
     }
 
@@ -432,4 +475,5 @@ public partial class MainView : System.Windows.Controls.Page {
             element.Visibility = CopiedTaskIdList.Count < 1 ? Visibility.Collapsed : Visibility.Visible;
         }
     }
+
 }

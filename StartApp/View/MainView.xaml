@@ -75,12 +75,20 @@
             Toggled="ToggledHandler">
             <widget:AppTaskItem.ContextMenu>
               <ContextMenu>
-                <MenuItem Click="RunTaskClickHandler" Header="运行">
+                <MenuItem Click="RunTaskClickHandler" Header="立即运行">
                   <MenuItem.Icon>
                     <TextBlock
                       Foreground="{StaticResource SuccessBackground}"
                       Style="{StaticResource IconFontStyle}"
                       Text="&#xe6c1;" />
+                  </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Click="RunTaskAsAdminClickHandler" Header="以管理员身份运行">
+                  <MenuItem.Icon>
+                    <TextBlock
+                      Foreground="{StaticResource SuccessBackground}"
+                      Style="{StaticResource IconFontStyle}"
+                      Text="&#xe670;" />
                   </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Click="OpenDirectoryClickHandler" Header="打开文件夹">
