@@ -28,6 +28,10 @@ public partial class MainView : System.Windows.Controls.Page {
     public static readonly DependencyProperty IsDelayVisibleProperty = DependencyProperty.Register("IsDelayVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
     public static readonly DependencyProperty IsStartedAsAdminProperty = DependencyProperty.Register("IsStartedAsAdmin", typeof(bool), typeof(MainView), new PropertyMetadata(false));
 
+    /// <summary>
+    /// AppTaskId 集合
+    /// </summary>
+    private static ISet<int> AppTaskIdSet => new HashSet<int>(new int[] { 0 });
     private readonly TaskDialog TaskDialog = new();
     public ObservableCollection<AppTask> AppTasks {
         get { return (ObservableCollection<AppTask>)GetValue(AppTasksProperty); }
@@ -81,7 +85,33 @@ public partial class MainView : System.Windows.Controls.Page {
         }
         // 读取配置，添加到列表
         foreach (var item in Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks)) {
-            AppTasks.Add(item);
+            AppTasks.Add(CheckAndSetTaskId(item));
+        }
+    }
+
+    /// <summary>
+    /// 检查和设置 AppTask.Id
+    /// </summary>
+    /// <param name="task"></param>
+    /// <returns>同 task</returns>
+    private AppTask CheckAndSetTaskId(AppTask task) {
+        if (AppTaskIdSet.Contains(task.Id)) {
+            task.Id = GenerateUniqueTaskId();
+        }
+        AppTaskIdSet.Add(task.Id);
+        return task;
+    }
+
+    /// <summary>
+    /// 生成唯一 AppTask.Id
+    /// </summary>
+    /// <returns></returns>
+    private int GenerateUniqueTaskId() {
+        while (true) {
+            int id = Random.Shared.Next();
+            if (!AppTaskIdSet.Contains(id)) {
+                return id;
+            }
         }
     }
 
@@ -121,7 +151,7 @@ public partial class MainView : System.Windows.Controls.Page {
         if (string.IsNullOrEmpty(taskCopy.Name)) {
             taskCopy.Name = Path.GetFileNameWithoutExtension(taskCopy.Path);
         }
-        AppTasks.Add(taskCopy);
+        AppTasks.Add(CheckAndSetTaskId(taskCopy));
         UpdateConfigurationAsync();
     }
 
