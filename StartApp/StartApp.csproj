@@ -7,11 +7,16 @@
     <UseWPF>true</UseWPF>
     <PlatformTarget>x64</PlatformTarget>
     <Platforms>AnyCPU;x64</Platforms>
+    <ApplicationIcon>Favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resource\CommonUITools-IconFont.ttf" />
     <None Remove="Resource\iconfont.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
