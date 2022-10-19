@@ -98,6 +98,7 @@
         <ui:NumberBox
           Maximum="2147483647"
           Minimum="0"
+          SmallChange="500"
           SpinButtonPlacementMode="Compact"
           Value="{Binding AppTask.Delay}" />
       </StackPanel>
