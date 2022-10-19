@@ -185,7 +185,7 @@ public partial class MainView : System.Windows.Controls.Page {
         if (!CheckRunningTask()) {
             return;
         }
-        var process = CommonUtils.Try(() => Process.Start(StartAppBootPath, ConfigurationPath));
+        var process = CommonUtils.Try(() => RunStartAppBoot(ConfigurationPath));
         if (process == null) {
             MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
         }
@@ -222,12 +222,7 @@ public partial class MainView : System.Windows.Controls.Page {
         if (!CheckRunningTask()) {
             return;
         }
-        var process = CommonUtils.Try(() => Process.Start(new ProcessStartInfo {
-            FileName = StartAppBootPath,
-            Arguments = ConfigurationPath,
-            UseShellExecute = true,
-            Verb = "RunAs"
-        }));
+        var process = CommonUtils.Try(() => RunStartAppBoot(ConfigurationPath, true));
         // 失败
         if (process == null) {
             MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
@@ -251,16 +246,37 @@ public partial class MainView : System.Windows.Controls.Page {
     }
 
     /// <summary>
-    /// 以管理员身份运行
+    /// 启动 StartAppBoot，with Notification
+    /// </summary>
+    /// <param name="args">运行参数，不检查此</param>
+    /// <param name="runAsAdmin">以管理员身份启动</param>
+    /// <returns></returns>
+    private Process? RunStartAppBoot(string args, bool runAsAdmin = false) {
+        // 不存在
+        if (!File.Exists(StartAppBootPath)) {
+            MessageBox.Error($"{StartAppBootPath} 丢失");
+            return null;
+        }
+        // 普通模式
+        if (!runAsAdmin) {
+            return Process.Start(StartAppBootPath, ConfigurationPath);
+        }
+        // 管理员身份
+        return Process.Start(new ProcessStartInfo {
+            FileName = StartAppBootPath,
+            Arguments = args,
+            UseShellExecute = true,
+            Verb = "RunAs"
+        });
+    }
+
+    /// <summary>
+    /// 以管理员身份运行选中项
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void RunTaskAsAdminClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
-        // 检查
-        if (!CheckRunningTask()) {
-            return;
-        }
         var selectedTasks = AppTaskListBox.SelectedItems;
         // 意外情况
         if (selectedTasks.Count == 0) {
@@ -281,12 +297,7 @@ public partial class MainView : System.Windows.Controls.Page {
         await File.WriteAllTextAsync(tempConfigFile, jsonData);
         #endregion
         // 启动 StartAppBoot
-        var process = CommonUtils.Try(() => Process.Start(new ProcessStartInfo {
-            FileName = StartAppBootPath,
-            Arguments = tempConfigFile,
-            UseShellExecute = true,
-            Verb = "RunAs"
-        }));
+        var process = CommonUtils.Try(() => RunStartAppBoot(tempConfigFile, true));
         // 失败
         if (process == null) {
             MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
