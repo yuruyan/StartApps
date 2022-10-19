@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,6 +28,7 @@ public partial class MainView : System.Windows.Controls.Page {
     public static readonly DependencyProperty IsPathVisibleProperty = DependencyProperty.Register("IsPathVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
     public static readonly DependencyProperty IsDelayVisibleProperty = DependencyProperty.Register("IsDelayVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
     public static readonly DependencyProperty IsStartedAsAdminProperty = DependencyProperty.Register("IsStartedAsAdmin", typeof(bool), typeof(MainView), new PropertyMetadata(false));
+    public static readonly DependencyProperty CopiedTaskIdListProperty = DependencyProperty.Register("CopiedTaskIdList", typeof(ICollection<int>), typeof(MainView), new PropertyMetadata());
 
     /// <summary>
     /// AppTaskId 集合
@@ -58,9 +60,17 @@ public partial class MainView : System.Windows.Controls.Page {
         get { return (bool)GetValue(IsStartedAsAdminProperty); }
         set { SetValue(IsStartedAsAdminProperty, value); }
     }
+    /// <summary>
+    /// 复制的 AppTask id
+    /// </summary>
+    public ICollection<int> CopiedTaskIdList {
+        get { return (ICollection<int>)GetValue(CopiedTaskIdListProperty); }
+        set { SetValue(CopiedTaskIdListProperty, value); }
+    }
 
     public MainView() {
         AppTasks = new();
+        CopiedTaskIdList = new List<int>();
         InitializeComponent();
         LoadConfigurationAsync();
         #region 设置 IsStartedAsAdmin
@@ -370,6 +380,52 @@ public partial class MainView : System.Windows.Controls.Page {
             }
             bool isEnabled = CommonUtils.NullCheck(AppTaskListBox.SelectedItem as AppTask).IsEnabled;
             element.Visibility = !isEnabled ? Visibility.Collapsed : Visibility.Visible;
+        }
+    }
+
+    /// <summary>
+    /// 复制选中项
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void CopyAppTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+        CopiedTaskIdList = new List<int>(AppTaskListBox.SelectedItems.Count);
+        foreach (AppTask item in AppTaskListBox.SelectedItems) {
+            CopiedTaskIdList.Add(item.Id);
+        }
+    }
+
+    /// <summary>
+    /// 粘贴选中项
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void PasteAppTaskClickHandler(object sender, RoutedEventArgs e) {
+        e.Handled = true;
+        if (CopiedTaskIdList.Count < 1) {
+            return;
+        }
+        foreach (var id in CopiedTaskIdList) {
+            var targetTask = AppTasks.FirstOrDefault(t => t.Id == id);
+            // 可能已经删除
+            if (targetTask is null) {
+                continue;
+            }
+            AppTasks.Add(CheckAndSetTaskId(
+                Mapper.Instance.Map<AppTask>(targetTask)
+            ));
+        }
+    }
+
+    /// <summary>
+    /// 粘贴选中项 LoadedHandler
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void PasteAppTaskMenuItemLoadedHandler(object sender, RoutedEventArgs e) {
+        if (sender is FrameworkElement element) {
+            element.Visibility = CopiedTaskIdList.Count < 1 ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

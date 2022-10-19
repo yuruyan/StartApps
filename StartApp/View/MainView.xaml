@@ -91,6 +91,21 @@
                       Text="&#xe660;" />
                   </MenuItem.Icon>
                 </MenuItem>
+                <!--  复制  -->
+                <MenuItem Click="CopyAppTaskClickHandler" Header="复制">
+                  <MenuItem.Icon>
+                    <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe6ef;" />
+                  </MenuItem.Icon>
+                </MenuItem>
+                <!--  粘贴  -->
+                <MenuItem
+                  Click="PasteAppTaskClickHandler"
+                  Header="粘贴"
+                  Loaded="PasteAppTaskMenuItemLoadedHandler">
+                  <MenuItem.Icon>
+                    <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe640;" />
+                  </MenuItem.Icon>
+                </MenuItem>
                 <!--  无多项操作  -->
                 <MenuItem Click="ModifyAppTaskClickHandler" Header="修改">
                   <MenuItem.Icon>
