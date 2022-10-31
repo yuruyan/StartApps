@@ -33,7 +33,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <summary>
     /// AppTaskId 集合
     /// </summary>
-    private static ISet<int> AppTaskIdSet => new HashSet<int>(new int[] { 0 });
+    private static readonly ISet<int> AppTaskIdSet = new HashSet<int>(new int[] { 0 });
     private readonly TaskDialog TaskDialog = new();
     public ObservableCollection<AppTask> AppTasks {
         get { return (ObservableCollection<AppTask>)GetValue(AppTasksProperty); }
