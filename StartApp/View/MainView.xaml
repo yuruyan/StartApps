@@ -48,7 +48,7 @@
       <!--  添加任务  -->
       <Button Click="AddTaskClickHandler" ToolTip="添加任务">
         <Button.Content>
-          <TextBlock Text="&#xe604;" />
+          <TextBlock Foreground="Black" Text="&#xe604;" />
         </Button.Content>
       </Button>
     </StackPanel>
