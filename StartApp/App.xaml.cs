@@ -29,16 +29,12 @@ public partial class App : Application {
     }
 
     private void GlobalDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
+        e.Handled = true;
         if (e.Exception is System.Runtime.InteropServices.COMException comException) {
             if (comException.ErrorCode == -2147221040) {
-                e.Handled = true;
                 return;
             }
         }
-        e.Handled = e.Exception switch {
-            WebException or InvalidOperationException or FileNotFoundException => true,
-            _ => false
-        };
         // 其他处理
         if (e.Exception is InvalidOperationException
             || e.Exception is IOException
@@ -51,6 +47,5 @@ public partial class App : Application {
                 MessageBoxImage.Error
             );
         }
-        Shutdown();
     }
 }
