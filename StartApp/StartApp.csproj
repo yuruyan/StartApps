@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <PlatformTarget>x64</PlatformTarget>
@@ -11,18 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resource\CommonUITools-IconFont.ttf" />
-    <None Remove="Resource\iconfont.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resource\CommonUITools-IconFont.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Resource\iconfont.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

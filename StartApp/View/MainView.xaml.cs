@@ -377,7 +377,7 @@ public partial class MainView : System.Windows.Controls.Page {
     private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
         foreach (AppTask task in AppTaskListBox.SelectedItems) {
-            UIUtils.OpenFileInDirectoryAsync(task.Path);
+            UIUtils.OpenFileInExplorerAsync(task.Path);
         }
     }
 
