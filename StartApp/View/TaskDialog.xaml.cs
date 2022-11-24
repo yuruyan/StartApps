@@ -9,34 +9,16 @@ namespace StartApp.View;
 
 public partial class TaskDialog : ContentDialog {
     private const double MinContentWidth = 300;
-    private const double MaxContentWidth = 450;
+    private const double MaxContentWidth = 600;
 
     public static readonly DependencyProperty AppTaskProperty = DependencyProperty.Register("AppTask", typeof(AppTask), typeof(TaskDialog), new PropertyMetadata());
-    public static readonly DependencyProperty HeaderTagProperty = DependencyProperty.Register("HeaderTag", typeof(string), typeof(TaskDialog), new PropertyMetadata());
-    public static readonly DependencyProperty InputTagProperty = DependencyProperty.Register("InputTag", typeof(string), typeof(TaskDialog), new PropertyMetadata());
-    public static readonly DependencyProperty InputItemPanelTagProperty = DependencyProperty.Register("InputItemPanelTag", typeof(string), typeof(TaskDialog), new PropertyMetadata());
 
     public AppTask AppTask {
         get { return (AppTask)GetValue(AppTaskProperty); }
         set { SetValue(AppTaskProperty, value); }
     }
-    public string HeaderTag {
-        get { return (string)GetValue(HeaderTagProperty); }
-        set { SetValue(HeaderTagProperty, value); }
-    }
-    public string InputTag {
-        get { return (string)GetValue(InputTagProperty); }
-        set { SetValue(InputTagProperty, value); }
-    }
-    public string InputItemPanelTag {
-        get { return (string)GetValue(InputItemPanelTagProperty); }
-        set { SetValue(InputItemPanelTagProperty, value); }
-    }
 
     public TaskDialog() {
-        HeaderTag = "HeaderNormal";
-        InputTag = "InputNormal";
-        InputItemPanelTag = "InputItemPanelNormal";
         InitializeComponent();
         InitContentScrollViewer();
     }

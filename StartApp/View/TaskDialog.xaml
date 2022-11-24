@@ -17,84 +17,60 @@
   mc:Ignorable="d">
   <ui:ContentDialog.Resources>
     <system:Double x:Key="HeaderWidth">120</system:Double>
-    <Style
-      x:Key="GlobalTextBlockStyle"
-      BasedOn="{StaticResource GlobalTextBlockStyle}"
-      TargetType="TextBlock">
-      <Style.Triggers>
-        <Trigger Property="Tag" Value="HeaderNormal">
-          <Setter Property="Width" Value="{StaticResource HeaderWidth}" />
-        </Trigger>
-      </Style.Triggers>
-    </Style>
-    <Style
-      x:Key="GlobalTextBoxStyle"
-      BasedOn="{StaticResource GlobalTextBoxStyle}"
-      TargetType="TextBox">
-      <Style.Triggers>
-        <Trigger Property="Tag" Value="InputNormal">
-          <Setter Property="Width" Value="{Binding ElementName=ContentScrollViewer, Path=ActualWidth, Converter={StaticResource SubtractConverter}, ConverterParameter={StaticResource HeaderWidth}}" />
-        </Trigger>
-      </Style.Triggers>
-    </Style>
-    <Style TargetType="ui:NumberBox">
-      <Setter Property="Width" Value="{Binding ElementName=ContentScrollViewer, Path=ActualWidth, Converter={StaticResource SubtractConverter}, ConverterParameter={StaticResource HeaderWidth}}" />
-    </Style>
-    <Style x:Key="InputItemPanelStyle" TargetType="StackPanel">
-      <Style.Triggers>
-        <Trigger Property="Tag" Value="InputItemPanelNormal">
-          <Setter Property="Orientation" Value="Horizontal" />
-        </Trigger>
-      </Style.Triggers>
-    </Style>
+    <system:Double x:Key="HeaderWithMarginWidth">121</system:Double>
+    <system:Double x:Key="ContentDialogMaxWidth">1000</system:Double>
   </ui:ContentDialog.Resources>
 
   <!--  输入  -->
   <ScrollViewer x:Name="ContentScrollViewer">
-    <ui:SimpleStackPanel
-      KeyDown="PanelKeyDownHandler"
-      Orientation="Vertical"
-      Spacing="8">
+    <ui:SimpleStackPanel KeyDown="PanelKeyDownHandler" Orientation="Vertical">
       <ui:SimpleStackPanel.Resources>
-        <Style BasedOn="{StaticResource GlobalTextBlockStyle}" TargetType="TextBlock">
-          <Setter Property="Tag" Value="{Binding HeaderTag}" />
+        <Style
+          x:Key="HeaderTextBlockStyle"
+          BasedOn="{StaticResource GlobalTextBlockStyle}"
+          TargetType="TextBlock">
+          <Setter Property="Width" Value="{StaticResource HeaderWidth}" />
+        </Style>
+        <Style
+          x:Key="HeaderTextBlockWithUnderlineStyle"
+          BasedOn="{StaticResource HeaderTextBlockStyle}"
+          TargetType="TextBlock">
+          <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter Property="TextDecorations" Value="Underline" />
+              <Setter Property="Cursor" Value="Hand" />
+            </Trigger>
+          </Style.Triggers>
         </Style>
         <Style BasedOn="{StaticResource GlobalTextBoxStyle}" TargetType="TextBox">
-          <Setter Property="Tag" Value="{Binding InputTag}" />
+          <Setter Property="Width" Value="{Binding ActualWidth, ElementName=ContentScrollViewer, Converter={StaticResource SubtractConverter}, ConverterParameter={StaticResource HeaderWithMarginWidth}}" />
+          <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-        <Style BasedOn="{StaticResource InputItemPanelStyle}" TargetType="StackPanel">
-          <Setter Property="Tag" Value="{Binding InputItemPanelTag}" />
+        <Style TargetType="ui:NumberBox">
+          <Setter Property="Width" Value="{Binding ActualWidth, ElementName=ContentScrollViewer, Converter={StaticResource SubtractConverter}, ConverterParameter={StaticResource HeaderWithMarginWidth}}" />
+        </Style>
+        <Style TargetType="StackPanel">
+          <Setter Property="Orientation" Value="Horizontal" />
         </Style>
       </ui:SimpleStackPanel.Resources>
       <StackPanel>
-        <TextBlock Text="应用名" />
+        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="应用名" />
         <TextBox Text="{Binding AppTask.Name}" />
       </StackPanel>
       <StackPanel>
         <TextBlock
           MouseUp="OpenTaskDirectoryMouseUpHandler"
+          Style="{StaticResource HeaderTextBlockWithUnderlineStyle}"
           Text="路径"
-          ToolTip="选择可执行文件">
-          <TextBlock.Style>
-            <Style BasedOn="{StaticResource GlobalTextBlockStyle}" TargetType="TextBlock">
-              <Setter Property="Tag" Value="{Binding HeaderTag}" />
-              <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                  <Setter Property="TextDecorations" Value="Underline" />
-                  <Setter Property="Cursor" Value="Hand" />
-                </Trigger>
-              </Style.Triggers>
-            </Style>
-          </TextBlock.Style>
-        </TextBlock>
+          ToolTip="选择可执行文件" />
         <TextBox Text="{Binding AppTask.Path}" />
       </StackPanel>
       <StackPanel>
-        <TextBlock Text="参数" />
+        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="参数" />
         <TextBox Text="{Binding AppTask.Args}" />
       </StackPanel>
-      <StackPanel>
-        <TextBlock Text="延迟执行(ms)" />
+      <StackPanel Margin="0,0,0,1">
+        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="延迟执行(ms)" />
         <ui:NumberBox
           Maximum="2147483647"
           Minimum="0"
