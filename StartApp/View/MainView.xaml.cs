@@ -148,26 +148,18 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <returns></returns>
     private void UpdateConfigurationAsync() {
         DebounceUtils.Debounce(UpdateConfigurationAsync, () => {
-            var taskFunc = () => Task.Run(() => {
+            TaskUtils.AddToTaskQueue(UpdateConfigurationTask, _ => {
                 try {
                     File.WriteAllText(
                         ConfigurationPath,
-                        Dispatcher.Invoke(() => {
-                            return JsonConvert.SerializeObject(Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks));
-                        })
+                        Dispatcher.Invoke(() => JsonConvert.SerializeObject(
+                            Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks))
+                        )
                     );
                 } catch (Exception error) {
                     Logger.Error(error);
                 }
             });
-            // 文件写入完毕
-            if (UpdateConfigurationTask.IsCompleted) {
-                UpdateConfigurationTask = taskFunc();
-            } else {
-                UpdateConfigurationTask = UpdateConfigurationTask.ContinueWith(_ => {
-                    taskFunc();
-                });
-            }
         });
     }
 
