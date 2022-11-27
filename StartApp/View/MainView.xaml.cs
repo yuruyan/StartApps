@@ -212,7 +212,7 @@ public partial class MainView : System.Windows.Controls.Page {
         if (!CheckRunningTask()) {
             return;
         }
-        var process = CommonUtils.Try(() => RunStartAppBoot(ConfigurationPath));
+        var process = TaskUtils.Try(() => RunStartAppBoot(ConfigurationPath));
         if (process == null) {
             MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
         }
@@ -249,7 +249,7 @@ public partial class MainView : System.Windows.Controls.Page {
         if (!CheckRunningTask()) {
             return;
         }
-        var process = CommonUtils.Try(() => RunStartAppBoot(ConfigurationPath, true));
+        var process = TaskUtils.Try(() => RunStartAppBoot(ConfigurationPath, true));
         // 失败
         if (process == null) {
             MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
@@ -324,7 +324,7 @@ public partial class MainView : System.Windows.Controls.Page {
         await File.WriteAllTextAsync(tempConfigFile, jsonData);
         #endregion
         // 启动 StartAppBoot
-        var process = CommonUtils.Try(() => RunStartAppBoot(tempConfigFile, true));
+        var process = TaskUtils.Try(() => RunStartAppBoot(tempConfigFile, true));
         // 失败
         if (process == null) {
             MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
