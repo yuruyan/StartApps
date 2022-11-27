@@ -21,6 +21,9 @@ csharp_style_expression_bodied_accessors = true:silent
 csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 
+# CS8974: Converting method group to non-delegate type
+dotnet_diagnostic.CS8974.severity = silent
+
 [*.{cs,vb}]
 #### Naming styles ####
 

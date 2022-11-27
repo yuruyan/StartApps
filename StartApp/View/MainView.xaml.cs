@@ -2,23 +2,26 @@
 using CommonUITools.View;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
+using NLog;
 using Shared.Model;
 using StartApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using MessageBox = CommonUITools.Widget.MessageBox;
 
 namespace StartApp.View;
 
 public partial class MainView : System.Windows.Controls.Page {
-
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private const string ConfigurationPath = "Data.json";
     // 启动应用程序
     private const string StartAppBootPath = "StartAppBoot.exe";
@@ -70,9 +73,21 @@ public partial class MainView : System.Windows.Controls.Page {
 
     public MainView() {
         AppTasks = new();
+        #region 监听 AppTasks 变化
+        DependencyPropertyDescriptor
+            .FromProperty(AppTasksProperty, this.GetType())
+            .AddValueChanged(this, (_, _) => UpdateConfigurationAsync());
+        AppTasks.CollectionChanged += (_, _) => UpdateConfigurationAsync();
+        #endregion
         CopiedTaskIdList = new List<int>();
         InitializeComponent();
         LoadConfigurationAsync();
+        // 等待更新写入完毕
+        App.Current.Exit += (_, _) => {
+            if (!UpdateConfigurationTask.IsCompleted) {
+                UpdateConfigurationTask.Wait();
+            }
+        };
         #region 设置 IsStartedAsAdmin
         WindowsIdentity identity = WindowsIdentity.GetCurrent();
         WindowsPrincipal principal = new(identity);
@@ -125,15 +140,35 @@ public partial class MainView : System.Windows.Controls.Page {
         }
     }
 
+    private Task UpdateConfigurationTask = Task.CompletedTask;
+
     /// <summary>
     /// 更新数据
     /// </summary>
     /// <returns></returns>
-    private Task UpdateConfigurationAsync() {
-        return File.WriteAllTextAsync(
-            ConfigurationPath,
-            JsonConvert.SerializeObject(Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks))
-        );
+    private void UpdateConfigurationAsync() {
+        DebounceUtils.Debounce(UpdateConfigurationAsync, () => {
+            var taskFunc = () => Task.Run(() => {
+                try {
+                    File.WriteAllText(
+                        ConfigurationPath,
+                        Dispatcher.Invoke(() => {
+                            return JsonConvert.SerializeObject(Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks));
+                        })
+                    );
+                } catch (Exception error) {
+                    Logger.Error(error);
+                }
+            });
+            // 文件写入完毕
+            if (UpdateConfigurationTask.IsCompleted) {
+                UpdateConfigurationTask = taskFunc();
+            } else {
+                UpdateConfigurationTask = UpdateConfigurationTask.ContinueWith(_ => {
+                    taskFunc();
+                });
+            }
+        });
     }
 
     /// <summary>
