@@ -20,6 +20,21 @@
     <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush" Color="{Binding Source={StaticResource Gray4}, Path=Color}" />
   </Page.Resources>
 
+  <Page.CommandBindings>
+    <CommandBinding
+      CanExecute="DeleteCanExecuteHandler"
+      Command="ApplicationCommands.Delete"
+      Executed="DeleteExecutedHandler" />
+    <CommandBinding
+      CanExecute="CopyCanExecuteHandler"
+      Command="ApplicationCommands.Copy"
+      Executed="CopyExecutedHandler" />
+    <CommandBinding
+      CanExecute="PasteCanExecuteHandler"
+      Command="ApplicationCommands.Paste"
+      Executed="PasteExecutedHandler" />
+  </Page.CommandBindings>
+
   <!--  菜单列表  -->
   <Grid>
     <Grid.RowDefinitions>
@@ -75,6 +90,7 @@
             Background="Transparent"
             IsDelayVisible="{Binding IsDelayVisible, ElementName=MainViewRoot}"
             IsPathVisible="{Binding IsPathVisible, ElementName=MainViewRoot}"
+            MouseDoubleClick="AppTaskItemMouseDoubleClickHandler"
             Toggled="ToggledHandler">
             <widget:AppTaskItem.ContextMenu>
               <ContextMenu>
@@ -103,7 +119,10 @@
                   </MenuItem.Icon>
                 </MenuItem>
                 <!--  复制  -->
-                <MenuItem Click="CopyAppTaskClickHandler" Header="复制">
+                <MenuItem
+                  Click="CopyAppTaskClickHandler"
+                  Command="ApplicationCommands.Copy"
+                  Header="复制">
                   <MenuItem.Icon>
                     <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe6ef;" />
                   </MenuItem.Icon>
@@ -111,6 +130,7 @@
                 <!--  粘贴  -->
                 <MenuItem
                   Click="PasteAppTaskClickHandler"
+                  Command="ApplicationCommands.Paste"
                   Header="粘贴"
                   Loaded="PasteAppTaskMenuItemLoadedHandler">
                   <MenuItem.Icon>
@@ -148,7 +168,10 @@
                   </MenuItem.Icon>
                 </MenuItem>
                 <!--  删除  -->
-                <MenuItem Click="RemoveAppTaskClickHandler" Header="删除">
+                <MenuItem
+                  Click="RemoveAppTaskClickHandler"
+                  Command="ApplicationCommands.Delete"
+                  Header="删除">
                   <MenuItem.Icon>
                     <TextBlock
                       Foreground="{StaticResource ErrorBackground}"

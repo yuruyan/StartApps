@@ -66,12 +66,12 @@ public class IconConverter : IValueConverter {
     /// <returns></returns>
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
         // 不合法
-        if (value == null || value is not string || !File.Exists(value as string)) {
-            return null;
+        if (value == null || value is not string path || !File.Exists(path)) {
+            return null!;
         }
-        Stream? stream = Utils.GetExeBitmap(value as string);
+        Stream? stream = Utils.GetExeBitmap(path);
         if (stream == null) {
-            return null;
+            return null!;
         }
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();

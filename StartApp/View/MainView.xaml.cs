@@ -13,8 +13,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using MessageBox = CommonUITools.Widget.MessageBox;
 
@@ -84,9 +86,8 @@ public partial class MainView : System.Windows.Controls.Page {
         LoadConfigurationAsync();
         // 等待更新写入完毕
         App.Current.Exit += (_, _) => {
-            if (!UpdateConfigurationTask.IsCompleted) {
-                UpdateConfigurationTask.Wait();
-            }
+            Visibility = Visibility.Collapsed;
+            Thread.Sleep(1000);
         };
         #region 设置 IsStartedAsAdmin
         WindowsIdentity identity = WindowsIdentity.GetCurrent();
@@ -140,15 +141,13 @@ public partial class MainView : System.Windows.Controls.Page {
         }
     }
 
-    private Task UpdateConfigurationTask = Task.CompletedTask;
-
     /// <summary>
     /// 更新数据
     /// </summary>
     /// <returns></returns>
     private void UpdateConfigurationAsync() {
         DebounceUtils.Debounce(UpdateConfigurationAsync, () => {
-            TaskUtils.AddToTaskQueue(UpdateConfigurationTask, _ => {
+            TaskUtils.AddToTaskQueue(UpdateConfigurationAsync, _ => {
                 try {
                     File.WriteAllText(
                         ConfigurationPath,
@@ -336,8 +335,12 @@ public partial class MainView : System.Windows.Controls.Page {
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private async void RemoveAppTaskClickHandler(object sender, RoutedEventArgs e) {
+    private void RemoveAppTaskClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
+        HandleDeleteCommandAsync();
+    }
+
+    private async void HandleDeleteCommandAsync() {
         WarningDialog warningDialog = WarningDialog.Shared;
         if (warningDialog.IsVisible) {
             return;
@@ -374,16 +377,20 @@ public partial class MainView : System.Windows.Controls.Page {
     private async void ModifyAppTaskClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
         if (sender is FrameworkElement element && element.DataContext is AppTask task) {
-            if (TaskDialog.IsVisible) {
-                return;
-            }
-            TaskDialog.AppTask = Mapper.Instance.Map<AppTask>(task);
-            if (await TaskDialog.ShowAsync() != ContentDialogResult.Primary) {
-                return;
-            }
-            Mapper.Instance.Map(TaskDialog.AppTask, task);
-            UpdateConfigurationAsync();
+            await HandleModifyCommandAsync(task);
         }
+    }
+
+    private async Task HandleModifyCommandAsync(AppTask task) {
+        if (TaskDialog.IsVisible) {
+            return;
+        }
+        TaskDialog.AppTask = Mapper.Instance.Map<AppTask>(task);
+        if (await TaskDialog.ShowAsync() != ContentDialogResult.Primary) {
+            return;
+        }
+        Mapper.Instance.Map(TaskDialog.AppTask, task);
+        UpdateConfigurationAsync();
     }
 
     /// <summary>
@@ -511,6 +518,10 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private void CopyAppTaskClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
+        HandleCopyCommand();
+    }
+
+    private void HandleCopyCommand() {
         CopiedTaskIdList = new List<int>(AppTaskListBox.SelectedItems.Count);
         foreach (AppTask item in AppTaskListBox.SelectedItems) {
             CopiedTaskIdList.Add(item.Id);
@@ -524,7 +535,11 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private void PasteAppTaskClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
-        if (CopiedTaskIdList.Count < 1) {
+        HandlePasteCommand();
+    }
+
+    private void HandlePasteCommand() {
+        if (!CanPaste) {
             return;
         }
         foreach (var id in CopiedTaskIdList) {
@@ -539,6 +554,8 @@ public partial class MainView : System.Windows.Controls.Page {
         }
     }
 
+    private bool CanPaste => CopiedTaskIdList.Count > 0;
+
     /// <summary>
     /// 粘贴选中项 LoadedHandler
     /// </summary>
@@ -550,6 +567,48 @@ public partial class MainView : System.Windows.Controls.Page {
         }
     }
 
+    private void DeleteCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
+        e.CanExecute = e.Handled = true;
+    }
+
+    private void DeleteExecutedHandler(object sender, ExecutedRoutedEventArgs e) {
+        e.Handled = true;
+        HandleDeleteCommandAsync();
+    }
+
+    private void CopyCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
+        e.CanExecute = e.Handled = true;
+    }
+
+    private void CopyExecutedHandler(object sender, ExecutedRoutedEventArgs e) {
+        e.Handled = true;
+        HandleCopyCommand();
+    }
+
+    private void PasteCanExecuteHandler(object sender, CanExecuteRoutedEventArgs e) {
+        e.Handled = true;
+        e.CanExecute = CanPaste;
+    }
+
+    private void PasteExecutedHandler(object sender, ExecutedRoutedEventArgs e) {
+        e.Handled = true;
+        HandlePasteCommand();
+    }
+
+    /// <summary>
+    /// 双击打开编辑框
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void AppTaskItemMouseDoubleClickHandler(object sender, MouseButtonEventArgs e) {
+        e.Handled = true;
+        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
+            // 延迟执行优化体验
+            await TaskUtils.DelayTaskAsync(200, async () => {
+                await HandleModifyCommandAsync(task);
+            });
+        }
+    }
 }
 
 /// <summary>
