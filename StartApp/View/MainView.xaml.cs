@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System.Collections.Specialized;
+using System.Security.Principal;
 
 namespace StartApp.View;
 
@@ -54,12 +55,17 @@ public partial class MainView : System.Windows.Controls.Page {
     }
 
     public MainView() {
-        AppTasks = new();
         #region 监听 AppTasks 变化
         DependencyPropertyDescriptor
             .FromProperty(AppTasksProperty, this.GetType())
-            .AddValueChanged(this, (_, _) => UpdateConfigurationAsync());
-        AppTasks.CollectionChanged += (_, _) => UpdateConfigurationAsync();
+            .AddValueChanged(this, (_, _) => {
+                AppTasks.CollectionChanged += (_, args) => {
+                    HandleDragDropCopyEvent(args);
+                    UpdateConfigurationAsync();
+                };
+                UpdateConfigurationAsync();
+            });
+        AppTasks = new();
         #endregion
         CopiedTaskIdList = new List<int>();
         InitializeComponent();
@@ -90,9 +96,7 @@ public partial class MainView : System.Windows.Controls.Page {
             return;
         }
         // 读取配置，添加到列表
-        foreach (var item in Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks)) {
-            AppTasks.Add(CheckAndSetTaskId(item));
-        }
+        AppTasks = new(Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks));
     }
 
     /// <summary>
@@ -143,6 +147,20 @@ public partial class MainView : System.Windows.Controls.Page {
     }
 
     /// <summary>
+    /// 处理 DragDropCopy 事件
+    /// </summary>
+    /// <param name="args"></param>
+    private void HandleDragDropCopyEvent(NotifyCollectionChangedEventArgs args) {
+        var newItems = args.NewItems?.Cast<AppTask>() ?? Enumerable.Empty<AppTask>();
+        if (args.Action == NotifyCollectionChangedAction.Add || args.Action == NotifyCollectionChangedAction.Reset) {
+            var dragCopyItems = newItems.Where(t => t.Id == -1).ToList();
+            foreach (var item in dragCopyItems) {
+                CheckAndSetTaskId(item);
+            }
+        }
+    }
+
+    /// <summary>
     /// 添加任务
     /// </summary>
     /// <param name="sender"></param>
@@ -157,18 +175,28 @@ public partial class MainView : System.Windows.Controls.Page {
         if (await TaskDialog.ShowAsync() != ContentDialogResult.Primary) {
             return;
         }
-        var taskCopy = Mapper.Instance.Map<AppTask>(TaskDialog.AppTask);
+        var newTask = Mapper.Instance.Map<AppTask>(TaskDialog.AppTask);
+        if (CheckTaskValidationAndUpdate(newTask)) {
+            AppTasks.Add(CheckAndSetTaskId(newTask));
+            UpdateConfigurationAsync();
+        }
+    }
+
+    /// <summary>
+    /// 检查 Task 合法性，并更新
+    /// </summary>
+    /// <param name="newTask"></param>
+    private bool CheckTaskValidationAndUpdate(AppTask newTask) {
         // 合法性检查
-        if (!IsAppTaskValid(taskCopy)) {
+        if (!IsAppTaskValid(newTask)) {
             MessageBox.Error("路径不能为空");
-            return;
+            return false;
         }
         // 补全 Name
-        if (string.IsNullOrEmpty(taskCopy.Name)) {
-            taskCopy.Name = Path.GetFileNameWithoutExtension(taskCopy.Path);
+        if (string.IsNullOrEmpty(newTask.Name)) {
+            newTask.Name = Path.GetFileNameWithoutExtension(newTask.Path);
         }
-        AppTasks.Add(CheckAndSetTaskId(taskCopy));
-        UpdateConfigurationAsync();
+        return true;
     }
 
     /// <summary>
@@ -582,6 +610,9 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private async void AppTaskItemMouseDoubleClickHandler(object sender, MouseButtonEventArgs e) {
         e.Handled = true;
+        if (e.ChangedButton != MouseButton.Left) {
+            return;
+        }
         if (sender is FrameworkElement element && element.DataContext is AppTask task) {
             await HandleModifyCommandAsync(task);
         }

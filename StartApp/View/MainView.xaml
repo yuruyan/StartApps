@@ -14,12 +14,6 @@
   d:DesignWidth="800"
   DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
   mc:Ignorable="d">
-  <!--<Page.Resources>
-    <SolidColorBrush x:Key="SystemControlHighlightListLowBrush" Color="{Binding Source={StaticResource Gray2}, Path=Color}" />
-    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumLowBrush" Color="{Binding Source={StaticResource Gray3}, Path=Color}" />
-    <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush" Color="{Binding Source={StaticResource Gray4}, Path=Color}" />
-  </Page.Resources>-->
-
   <Page.CommandBindings>
     <CommandBinding
       CanExecute="DeleteCanExecuteHandler"
@@ -72,8 +66,10 @@
     <ListBox
       Name="AppTaskListBox"
       Grid.Row="1"
+      dd:DragDrop.DragDropCopyKeyState="ControlKey"
       dd:DragDrop.IsDragSource="True"
       dd:DragDrop.IsDropTarget="True"
+      dd:DragDrop.UseDefaultDragAdorner="True"
       ItemsSource="{Binding AppTasks}"
       SelectionMode="Extended">
       <ListBox.ItemContainerStyle>
