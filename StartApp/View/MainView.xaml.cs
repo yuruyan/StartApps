@@ -91,6 +91,9 @@ public partial class MainView : System.Windows.Controls.Page {
     /// 读取数据
     /// </summary>
     private async void LoadConfigurationAsync() {
+        if (!File.Exists(ConfigurationPath)) {
+            File.Create(ConfigurationPath);
+        }
         var appTasks = JsonConvert.DeserializeObject<IList<AppTaskPO>>(await File.ReadAllTextAsync(ConfigurationPath));
         if (appTasks is null) {
             return;
