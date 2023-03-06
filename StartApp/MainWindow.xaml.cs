@@ -1,7 +1,4 @@
-﻿using StartApp.View;
-using System.Windows;
-
-namespace StartApp;
+﻿namespace StartApp;
 
 public partial class MainWindow : Window {
     public MainWindow() {

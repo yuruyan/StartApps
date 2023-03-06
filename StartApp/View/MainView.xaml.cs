@@ -1,24 +1,4 @@
-﻿using CommonUITools.Utils;
-using CommonUITools.View;
-using ModernWpf.Controls;
-using Newtonsoft.Json;
-using NLog;
-using Shared.Model;
-using StartApp.Model;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Security.Principal;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
-using MessageBox = CommonUITools.Widget.MessageBox;
+﻿using System.Security.Principal;
 
 namespace StartApp.View;
 
@@ -603,10 +583,7 @@ public partial class MainView : System.Windows.Controls.Page {
     private async void AppTaskItemMouseDoubleClickHandler(object sender, MouseButtonEventArgs e) {
         e.Handled = true;
         if (sender is FrameworkElement element && element.DataContext is AppTask task) {
-            // 延迟执行优化体验
-            await TaskUtils.DelayTaskAsync(200, async () => {
-                await HandleModifyCommandAsync(task);
-            });
+            await HandleModifyCommandAsync(task);
         }
     }
 }

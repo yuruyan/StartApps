@@ -1,11 +1,4 @@
-﻿using CommonUITools.Model;
-using CommonUITools.Utils;
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-
-namespace StartApp.Util;
+﻿namespace StartApp.Util;
 
 public static class Utils {
     /// <summary>
@@ -16,7 +9,7 @@ public static class Utils {
     [NoException]
     public static Stream? GetExeBitmap(string path) {
         return TaskUtils.Try(() => {
-            uint _nIcons = PInvokeHelpers.PrivateExtractIcons(path, 0, 0, 0, null, null, 0, 0);
+            uint _nIcons = PInvokeHelpers.PrivateExtractIcons(path, 0, 0, 0, null!, null!, 0, 0);
             if (_nIcons < 1) {
                 return null;
             }

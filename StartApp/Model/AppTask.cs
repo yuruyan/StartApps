@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using System.Windows;
-using AutoMapper;
-using Shared.Model;
+﻿using AutoMapper;
+using Newtonsoft.Json.Serialization;
 
 namespace StartApp.Model;
 

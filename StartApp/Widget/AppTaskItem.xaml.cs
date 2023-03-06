@@ -1,11 +1,4 @@
-﻿using CommonUITools.Utils;
-using StartApp.Model;
-using StartApp.Util;
-using System;
-using System.Globalization;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 

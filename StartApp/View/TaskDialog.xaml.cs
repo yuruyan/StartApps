@@ -1,13 +1,8 @@
 ﻿using Microsoft.Win32;
-using ModernWpf.Controls;
-using StartApp.Model;
-using System.IO;
-using System.Windows;
-using System.Windows.Input;
 
 namespace StartApp.View;
 
-public partial class TaskDialog : ContentDialog {
+public partial class TaskDialog : BaseDialog {
     private const double MinContentWidth = 300;
     private const double MaxContentWidth = 600;
 
