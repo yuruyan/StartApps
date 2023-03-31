@@ -34,7 +34,7 @@
       <Image
         Width="20"
         Height="20"
-        Source="{Binding AppTask.Path, ElementName=AppTaskItemRoot, Converter={StaticResource IconConverter}}"
+        Source="{Binding AppTask.ImageSource, ElementName=AppTaskItemRoot}"
         Stretch="Uniform" />
       <!--  应用名  -->
       <TextBlock Text="{Binding AppTask.Name, ElementName=AppTaskItemRoot}" />
