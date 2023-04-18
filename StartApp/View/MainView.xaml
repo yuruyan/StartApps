@@ -28,6 +28,80 @@
       Command="ApplicationCommands.Paste"
       Executed="PasteExecutedHandler" />
   </Page.CommandBindings>
+  <Page.Resources>
+    <ContextMenu x:Key="TaskItemContextMenu">
+      <ContextMenu.Resources>
+        <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
+      </ContextMenu.Resources>
+      <MenuItem Click="RunTaskClickHandler" Header="立即运行">
+        <MenuItem.Icon>
+          <TextBlock Foreground="{StaticResource SuccessBackground}" Text="&#xe6c1;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <MenuItem Click="RunTaskAsAdminClickHandler" Header="以管理员身份运行">
+        <MenuItem.Icon>
+          <TextBlock Foreground="{StaticResource SuccessBackground}" Text="&#xe670;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <MenuItem Click="OpenDirectoryClickHandler" Header="打开文件夹">
+        <MenuItem.Icon>
+          <TextBlock Foreground="#f5a623" Text="&#xe660;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  复制  -->
+      <MenuItem
+        Click="CopyAppTaskClickHandler"
+        Command="ApplicationCommands.Copy"
+        Header="复制">
+        <MenuItem.Icon>
+          <TextBlock Text="&#xe6ef;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  粘贴  -->
+      <MenuItem
+        Click="PasteAppTaskClickHandler"
+        Command="ApplicationCommands.Paste"
+        Header="粘贴"
+        Loaded="PasteAppTaskMenuItemLoadedHandler">
+        <MenuItem.Icon>
+          <TextBlock Text="&#xe640;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  无多项操作  -->
+      <MenuItem Click="ModifyAppTaskClickHandler" Header="修改">
+        <MenuItem.Icon>
+          <TextBlock Text="&#xe698;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  Enable  -->
+      <MenuItem
+        Click="EnableTaskClickHandler"
+        Header="启用"
+        Loaded="EnableTaskMenuItemLoaded">
+        <MenuItem.Icon>
+          <TextBlock Foreground="{StaticResource SuccessBackground}" Text="&#xe662;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  Disable  -->
+      <MenuItem
+        Click="DisableTaskClickHandler"
+        Header="禁用"
+        Loaded="DisableTaskMenuItemLoaded">
+        <MenuItem.Icon>
+          <TextBlock Foreground="{StaticResource ErrorBackground}" Text="&#xe661;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  删除  -->
+      <MenuItem
+        Click="RemoveAppTaskClickHandler"
+        Command="ApplicationCommands.Delete"
+        Header="删除">
+        <MenuItem.Icon>
+          <TextBlock Foreground="{StaticResource ErrorBackground}" Text="&#xe6b4;" />
+        </MenuItem.Icon>
+      </MenuItem>
+    </ContextMenu>
+  </Page.Resources>
 
   <!--  菜单列表  -->
   <Grid>
@@ -58,7 +132,7 @@
       <!--  添加任务  -->
       <Button Click="AddTaskClickHandler" ToolTip="添加任务">
         <Button.Content>
-          <TextBlock Foreground="Black" Text="&#xe604;" />
+          <TextBlock Text="&#xe604;" />
         </Button.Content>
       </Button>
     </StackPanel>
@@ -72,112 +146,17 @@
       dd:DragDrop.UseDefaultDragAdorner="True"
       ItemsSource="{Binding AppTasks}"
       SelectionMode="Extended">
-      <ListBox.ItemContainerStyle>
-        <Style BasedOn="{StaticResource DefaultListBoxItemStyle}" TargetType="ListBoxItem">
-          <Setter Property="Padding" Value="5,0" />
-        </Style>
-      </ListBox.ItemContainerStyle>
       <ListBox.ItemTemplate>
         <DataTemplate>
           <widget:AppTaskItem
-            Width="{Binding ElementName=AppTaskListBox, Path=ActualWidth, Converter={StaticResource SubtractConverter}, ConverterParameter=12}"
             Padding="4,8"
             AppTask="{Binding}"
             Background="Transparent"
+            ContextMenu="{StaticResource TaskItemContextMenu}"
             IsDelayVisible="{Binding IsDelayVisible, ElementName=MainViewRoot}"
             IsPathVisible="{Binding IsPathVisible, ElementName=MainViewRoot}"
             MouseDoubleClick="AppTaskItemMouseDoubleClickHandler"
-            Toggled="ToggledHandler">
-            <widget:AppTaskItem.ContextMenu>
-              <ContextMenu>
-                <MenuItem Click="RunTaskClickHandler" Header="立即运行">
-                  <MenuItem.Icon>
-                    <TextBlock
-                      Foreground="{StaticResource SuccessBackground}"
-                      Style="{StaticResource IconFontStyle}"
-                      Text="&#xe6c1;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Click="RunTaskAsAdminClickHandler" Header="以管理员身份运行">
-                  <MenuItem.Icon>
-                    <TextBlock
-                      Foreground="{StaticResource SuccessBackground}"
-                      Style="{StaticResource IconFontStyle}"
-                      Text="&#xe670;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Click="OpenDirectoryClickHandler" Header="打开文件夹">
-                  <MenuItem.Icon>
-                    <TextBlock
-                      Foreground="#f5a623"
-                      Style="{StaticResource IconFontStyle}"
-                      Text="&#xe660;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <!--  复制  -->
-                <MenuItem
-                  Click="CopyAppTaskClickHandler"
-                  Command="ApplicationCommands.Copy"
-                  Header="复制">
-                  <MenuItem.Icon>
-                    <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe6ef;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <!--  粘贴  -->
-                <MenuItem
-                  Click="PasteAppTaskClickHandler"
-                  Command="ApplicationCommands.Paste"
-                  Header="粘贴"
-                  Loaded="PasteAppTaskMenuItemLoadedHandler">
-                  <MenuItem.Icon>
-                    <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe640;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <!--  无多项操作  -->
-                <MenuItem Click="ModifyAppTaskClickHandler" Header="修改">
-                  <MenuItem.Icon>
-                    <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe698;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <!--  Enable  -->
-                <MenuItem
-                  Click="EnableTaskClickHandler"
-                  Header="启用"
-                  Loaded="EnableTaskMenuItemLoaded">
-                  <MenuItem.Icon>
-                    <TextBlock
-                      Foreground="{StaticResource SuccessBackground}"
-                      Style="{StaticResource IconFontStyle}"
-                      Text="&#xe662;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <!--  Disable  -->
-                <MenuItem
-                  Click="DisableTaskClickHandler"
-                  Header="禁用"
-                  Loaded="DisableTaskMenuItemLoaded">
-                  <MenuItem.Icon>
-                    <TextBlock
-                      Foreground="{StaticResource ErrorBackground}"
-                      Style="{StaticResource IconFontStyle}"
-                      Text="&#xe661;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-                <!--  删除  -->
-                <MenuItem
-                  Click="RemoveAppTaskClickHandler"
-                  Command="ApplicationCommands.Delete"
-                  Header="删除">
-                  <MenuItem.Icon>
-                    <TextBlock
-                      Foreground="{StaticResource ErrorBackground}"
-                      Style="{StaticResource IconFontStyle}"
-                      Text="&#xe6b4;" />
-                  </MenuItem.Icon>
-                </MenuItem>
-              </ContextMenu>
-            </widget:AppTaskItem.ContextMenu>
-          </widget:AppTaskItem>
+            Toggled="ToggledHandler" />
         </DataTemplate>
       </ListBox.ItemTemplate>
     </ListBox>
