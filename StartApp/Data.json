@@ -1,18 +1,7 @@
 ﻿[
   {
     "name": "文件资源管理器",
-    "path": "explorer.exe",
-    "args": "e:\\"
-  },
-  {
-    "name": "腾讯QQ",
-    "path": "D:\\Installed\\qq\\Bin\\QQScLauncher.exe",
-    "delay": 10000
-  },
-  {
-    "name": "微信",
-    "path": "D:\\Installed\\wechat\\WeChat.exe",
-    "delay": 10000
+    "path": "C:\\Windows\\explorer.exe"
   },
   {
     "name": "edge浏览器",
@@ -24,14 +13,7 @@
     "path": "C:\\WINDOWS\\system32\\Taskmgr.exe"
   },
   {
-    "name": "Todos",
-    "path": "explorer.exe",
-    "delay": 10000,
-    "args": "shell:AppsFolder\\Microsoft.Todos_8wekyb3d8bbwe!App"
-  },
-  {
-    "name": "Outlook",
-    "path": "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE",
-    "delay": 10000
+    "name": "Notepad",
+    "path": "C:\\Windows\\notepad.exe"
   }
 ]
