@@ -3,9 +3,6 @@
 namespace StartApp.View;
 
 public partial class TaskDialog : BaseDialog {
-    private const double MinContentWidth = 300;
-    private const double MaxContentWidth = 600;
-
     public static readonly DependencyProperty AppTaskProperty = DependencyProperty.Register("AppTask", typeof(AppTask), typeof(TaskDialog), new PropertyMetadata());
 
     public AppTask AppTask {
@@ -15,23 +12,9 @@ public partial class TaskDialog : BaseDialog {
 
     public TaskDialog() {
         InitializeComponent();
-        InitContentScrollViewer();
-    }
-
-    /// <summary>
-    /// 初始化 ContentScrollViewer
-    /// </summary>
-    private void InitContentScrollViewer() {
-        // 随窗口大小变化，改变 ContentScrollViewer 宽度
-        ContentScrollViewer.Width = MinContentWidth;
-        App.Current.MainWindow.SizeChanged += (s, e) => {
-            double newWidth = e.NewSize.Width / 1.5;
-            ContentScrollViewer.Width = newWidth switch {
-                < MinContentWidth => MinContentWidth,
-                > MaxContentWidth => MaxContentWidth,
-                _ => newWidth
-            };
-        };
+        this.EnableAutoResize(
+            (double)Resources["RegexListItemsControlMinWidth"]
+        );
     }
 
     /// <summary>

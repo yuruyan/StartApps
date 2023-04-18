@@ -19,6 +19,8 @@
     <system:Double x:Key="HeaderWidth">120</system:Double>
     <system:Double x:Key="HeaderWithMarginWidth">121</system:Double>
     <system:Double x:Key="ContentDialogMaxWidth">1000</system:Double>
+    <system:Double x:Key="RegexListItemsControlMinWidth">300</system:Double>
+    <system:Double x:Key="RegexListItemsControlMaxWidth">500</system:Double>
   </tools:BaseDialog.Resources>
 
   <!--  输入  -->
@@ -46,7 +48,7 @@
           <Setter Property="Width" Value="{Binding ActualWidth, ElementName=ContentScrollViewer, Converter={StaticResource SubtractConverter}, ConverterParameter={StaticResource HeaderWithMarginWidth}}" />
           <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-        <Style TargetType="ui:NumberBox">
+        <Style BasedOn="{StaticResource {x:Type ui:NumberBox}}" TargetType="ui:NumberBox">
           <Setter Property="Width" Value="{Binding ActualWidth, ElementName=ContentScrollViewer, Converter={StaticResource SubtractConverter}, ConverterParameter={StaticResource HeaderWithMarginWidth}}" />
         </Style>
         <Style TargetType="StackPanel">
