@@ -90,16 +90,20 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <summary>
     /// 读取数据
     /// </summary>
-    private async void LoadConfigurationAsync() {
-        if (!File.Exists(ConfigurationPath)) {
-            File.Create(ConfigurationPath);
-        }
-        var appTasks = JsonConvert.DeserializeObject<IList<AppTaskPO>>(await File.ReadAllTextAsync(ConfigurationPath));
-        if (appTasks is null) {
-            return;
-        }
+    private async Task LoadConfigurationAsync() {
         // 读取配置，添加到列表
-        AppTasks = new(Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks));
+        var appTasks = await Task.Run(() => {
+            using var file = File.Open(ConfigurationPath, FileMode.OpenOrCreate, FileAccess.Read);
+            using var fileReader = new StreamReader(file);
+            return TaskUtils.Try(() => JsonConvert.DeserializeObject<IList<AppTaskPO>>(
+                fileReader.ReadToEnd()
+            ));
+        });
+        if (appTasks != null) {
+            AppTasks = new(
+                Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks)
+            );
+        }
     }
 
     /// <summary>
@@ -135,9 +139,9 @@ public partial class MainView : System.Windows.Controls.Page {
     /// </summary>
     /// <returns></returns>
     private void UpdateConfigurationAsync() {
-        Task.Run(() => UpdateConfigurationDebounce.Run(() => {
+        UpdateConfigurationDebounce.RunAsync(async () => {
             try {
-                File.WriteAllText(
+                await File.WriteAllTextAsync(
                     ConfigurationPath,
                     JsonConvert.SerializeObject(Dispatcher.Invoke(
                         () => Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks)
@@ -147,7 +151,7 @@ public partial class MainView : System.Windows.Controls.Page {
                 MessageBoxUtils.Error("更新失败");
                 Logger.Error(error);
             }
-        }));
+        });
     }
 
     /// <summary>
