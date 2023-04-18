@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using CommonUITools.Model;
+using System.Collections.Specialized;
 using System.Security.Principal;
 
 namespace StartApp.View;
@@ -10,7 +11,8 @@ public partial class MainView : System.Windows.Controls.Page {
     private const string StartAppBootPath = "StartAppBoot.exe";
     private const double DelayVisibleThreshold = 520;
     private const double PathVisibleThreshold = 800;
-    public static readonly DependencyProperty AppTasksProperty = DependencyProperty.Register("AppTasks", typeof(ObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
+    public static readonly DependencyPropertyKey AppTasksPropertyKey = DependencyProperty.RegisterReadOnly("AppTasks", typeof(ExtendedObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
+    public static readonly DependencyProperty AppTasksProperty = AppTasksPropertyKey.DependencyProperty;
     public static readonly DependencyProperty IsPathVisibleProperty = DependencyProperty.Register("IsPathVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
     public static readonly DependencyProperty IsDelayVisibleProperty = DependencyProperty.Register("IsDelayVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
     public static readonly DependencyProperty IsStartedAsAdminProperty = DependencyProperty.Register("IsStartedAsAdmin", typeof(bool), typeof(MainView), new PropertyMetadata(false));
@@ -21,10 +23,7 @@ public partial class MainView : System.Windows.Controls.Page {
     /// </summary>
     private static readonly ISet<int> AppTaskIdSet = new HashSet<int>(new int[] { 0 });
     private readonly TaskDialog TaskDialog = new();
-    public ObservableCollection<AppTask> AppTasks {
-        get { return (ObservableCollection<AppTask>)GetValue(AppTasksProperty); }
-        set { SetValue(AppTasksProperty, value); }
-    }
+    public ExtendedObservableCollection<AppTask> AppTasks => (ExtendedObservableCollection<AppTask>)GetValue(AppTasksProperty);
     /// <summary>
     /// 路径是否可见
     /// </summary>
@@ -55,19 +54,14 @@ public partial class MainView : System.Windows.Controls.Page {
     }
 
     public MainView() {
-        #region 监听 AppTasks 变化
-        DependencyPropertyDescriptor
-            .FromProperty(AppTasksProperty, this.GetType())
-            .AddValueChanged(this, (_, _) => {
-                AppTasks.CollectionChanged += (_, args) => {
-                    HandleDragDropCopyEvent(args);
-                    UpdateConfigurationAsync();
-                };
-                UpdateConfigurationAsync();
-            });
-        AppTasks = new();
-        #endregion
         CopiedTaskIdList = new List<int>();
+        SetValue(AppTasksPropertyKey, new ExtendedObservableCollection<AppTask>());
+        #region 监听 AppTasks 变化
+        AppTasks.CollectionChanged += (_, args) => {
+            HandleDragDropCopyEvent(args);
+            UpdateConfigurationAsync();
+        };
+        #endregion
         InitializeComponent();
         LoadConfigurationAsync();
         // 等待更新写入完毕
@@ -99,10 +93,8 @@ public partial class MainView : System.Windows.Controls.Page {
                 fileReader.ReadToEnd()
             ));
         });
-        if (appTasks != null) {
-            AppTasks = new(
-                Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks)
-            );
+        if (appTasks != null && appTasks.Count > 0) {
+            AppTasks.AddRange(Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks));
         }
     }
 

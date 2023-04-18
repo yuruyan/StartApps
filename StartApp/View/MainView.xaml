@@ -149,7 +149,7 @@
       <ListBox.ItemTemplate>
         <DataTemplate>
           <widget:AppTaskItem
-            Padding="4,8"
+            Padding="16,8,0,8"
             AppTask="{Binding}"
             Background="Transparent"
             ContextMenu="{StaticResource TaskItemContextMenu}"
