@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resource\iconfont.ttf" />
+    <Resource Include="Resources\iconfont.ttf" />
   </ItemGroup>
 
   <ItemGroup>
