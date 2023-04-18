@@ -1,9 +1,10 @@
-﻿namespace StartApp;
+﻿using CommonUITools.Controls;
 
-public partial class MainWindow : Window {
+namespace StartApp;
+
+public partial class MainWindow : BaseWindow {
     public MainWindow() {
         InitializeComponent();
-        CommonUITools.App.RegisterWidgetPage(this);
         // 初始化
         ContentFrame.Content = new MainView();
     }

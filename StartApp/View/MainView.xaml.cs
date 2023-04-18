@@ -128,25 +128,26 @@ public partial class MainView : System.Windows.Controls.Page {
         }
     }
 
+    private readonly Debounce UpdateConfigurationDebounce = new();
+
     /// <summary>
     /// 更新数据
     /// </summary>
     /// <returns></returns>
     private void UpdateConfigurationAsync() {
-        DebounceUtils.Debounce(UpdateConfigurationAsync, () => {
-            TaskUtils.AddToTaskQueue(UpdateConfigurationAsync, _ => {
-                try {
-                    File.WriteAllText(
-                        ConfigurationPath,
-                        Dispatcher.Invoke(() => JsonConvert.SerializeObject(
-                            Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks))
-                        )
-                    );
-                } catch (Exception error) {
-                    Logger.Error(error);
-                }
-            });
-        });
+        Task.Run(() => UpdateConfigurationDebounce.Run(() => {
+            try {
+                File.WriteAllText(
+                    ConfigurationPath,
+                    JsonConvert.SerializeObject(Dispatcher.Invoke(
+                        () => Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks)
+                    ))
+                );
+            } catch (Exception error) {
+                MessageBoxUtils.Error("更新失败");
+                Logger.Error(error);
+            }
+        }));
     }
 
     /// <summary>
@@ -192,7 +193,7 @@ public partial class MainView : System.Windows.Controls.Page {
     private bool CheckTaskValidationAndUpdate(AppTask newTask) {
         // 合法性检查
         if (!IsAppTaskValid(newTask)) {
-            MessageBox.Error("路径不能为空");
+            MessageBoxUtils.Error("路径不能为空");
             return false;
         }
         // 补全 Name
@@ -224,7 +225,7 @@ public partial class MainView : System.Windows.Controls.Page {
         }
         var process = TaskUtils.Try(() => RunStartAppBoot(ConfigurationPath));
         if (process == null) {
-            MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
+            MessageBoxUtils.Error($"启动程序 {StartAppBootPath} 失败");
         }
     }
 
@@ -238,11 +239,11 @@ public partial class MainView : System.Windows.Controls.Page {
         }
         // 检查文件
         if (!File.Exists(StartAppBootPath)) {
-            MessageBox.Error($"{StartAppBootPath} 丢失");
+            MessageBoxUtils.Error($"{StartAppBootPath} 丢失");
             return false;
         }
         if (!File.Exists(ConfigurationPath)) {
-            MessageBox.Error($"{ConfigurationPath} 丢失");
+            MessageBoxUtils.Error($"{ConfigurationPath} 丢失");
             return false;
         }
         return true;
@@ -262,7 +263,7 @@ public partial class MainView : System.Windows.Controls.Page {
         var process = TaskUtils.Try(() => RunStartAppBoot(ConfigurationPath, true));
         // 失败
         if (process == null) {
-            MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
+            MessageBoxUtils.Error($"启动程序 {StartAppBootPath} 失败");
         }
     }
 
@@ -277,7 +278,7 @@ public partial class MainView : System.Windows.Controls.Page {
             try {
                 Process.Start(task.Path, task.Args);
             } catch {
-                MessageBox.Error($"'{task.Name}' 启动失败");
+                MessageBoxUtils.Error($"'{task.Name}' 启动失败");
             }
         }
     }
@@ -291,7 +292,7 @@ public partial class MainView : System.Windows.Controls.Page {
     private Process? RunStartAppBoot(string args, bool runAsAdmin = false) {
         // 不存在
         if (!File.Exists(StartAppBootPath)) {
-            MessageBox.Error($"{StartAppBootPath} 丢失");
+            MessageBoxUtils.Error($"{StartAppBootPath} 丢失");
             return null;
         }
         // 普通模式
@@ -337,7 +338,7 @@ public partial class MainView : System.Windows.Controls.Page {
         var process = TaskUtils.Try(() => RunStartAppBoot(tempConfigFile, true));
         // 失败
         if (process == null) {
-            MessageBox.Error($"启动程序 {StartAppBootPath} 失败");
+            MessageBoxUtils.Error($"启动程序 {StartAppBootPath} 失败");
         }
     }
 
@@ -376,7 +377,7 @@ public partial class MainView : System.Windows.Controls.Page {
         foreach (var item in tasksCopy) {
             AppTasks.Remove(item);
         }
-        MessageBox.Success("删除成功");
+        MessageBoxUtils.Success("删除成功");
         UpdateConfigurationAsync();
     }
 
@@ -422,7 +423,7 @@ public partial class MainView : System.Windows.Controls.Page {
     private void OpenDirectoryClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
         foreach (AppTask task in AppTaskListBox.SelectedItems) {
-            UIUtils.OpenFileInExplorerAsync(task.Path);
+            task.Path.OpenFileInExplorerAsync();
         }
     }
 

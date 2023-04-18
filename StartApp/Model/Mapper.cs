@@ -3,7 +3,7 @@
 namespace StartApp.Model;
 
 public class Mapper {
-    public static IMapper Instance => CommonUtils.GetSingletonInstance<IMapper>(typeof(Mapper), () => {
+    public static IMapper Instance => CommonUtils.GetSingletonInstance<IMapper>(() => {
         return new MapperConfiguration(cfg => {
             cfg.ClearPrefixes();
             cfg.SourceMemberNamingConvention = new LowerUnderscoreNamingConvention();

@@ -2,7 +2,6 @@
 global using CommonTools.Model;
 global using CommonTools.Utils;
 global using CommonUITools.Utils;
-global using CommonUITools.View;
 global using ModernWpf.Controls;
 global using Newtonsoft.Json;
 global using NLog;
@@ -25,4 +24,4 @@ global using System.Threading.Tasks;
 global using System.Windows;
 global using System.Windows.Input;
 global using System.Windows.Threading;
-global using MessageBox = CommonUITools.Widget.MessageBox;
+global using CommonUITools.Controls;
