@@ -118,23 +118,22 @@
         <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
       </StackPanel.Resources>
       <!--  以管理员身份运行  -->
-      <Button Click="StartRunningAllTasksAsAdminClickHandler" ToolTip="以管理员身份运行">
-        <Button.Content>
-          <TextBlock Foreground="{StaticResource ErrorBackground}" Text="&#xe670;" />
-        </Button.Content>
-      </Button>
+      <Button
+        Click="StartRunningAllTasksAsAdminClickHandler"
+        Content="&#xe670;"
+        Foreground="{StaticResource ErrorBackground}"
+        ToolTip="以管理员身份运行" />
       <!--  开始运行  -->
-      <Button Click="StartRunningAllTasksClickHandler" ToolTip="开始运行">
-        <Button.Content>
-          <TextBlock Foreground="{StaticResource SuccessBackground}" Text="&#xe670;" />
-        </Button.Content>
-      </Button>
+      <Button
+        Click="StartRunningAllTasksClickHandler"
+        Content="&#xe670;"
+        Foreground="{StaticResource SuccessBackground}"
+        ToolTip="开始运行" />
       <!--  添加任务  -->
-      <Button Click="AddTaskClickHandler" ToolTip="添加任务">
-        <Button.Content>
-          <TextBlock Text="&#xe604;" />
-        </Button.Content>
-      </Button>
+      <Button
+        Click="AddTaskClickHandler"
+        Content="&#xe604;"
+        ToolTip="添加任务" />
     </StackPanel>
     <!--  任务列表  -->
     <ListBox

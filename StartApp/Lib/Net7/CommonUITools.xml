@@ -1274,6 +1274,23 @@
             返回
             </summary>
         </member>
+        <member name="M:CommonUITools.Themes.ThemeManager.CurrentThemeChanged(CommonUITools.Model.ThemeMode,CommonUITools.Model.ThemeMode)">
+            <summary>
+            ThemeChanged
+            </summary>
+            <param name="oldVal"></param>
+            <param name="newVal"></param>
+        </member>
+        <member name="M:CommonUITools.Themes.ThemeManager.UpdateTheme">
+            <summary>
+            Update Current Theme
+            </summary>
+        </member>
+        <member name="M:CommonUITools.Themes.ThemeManager.SwitchToAutoTheme">
+            <summary>
+            Auto theme
+            </summary>
+        </member>
         <member name="M:CommonUITools.Themes.ThemeManager.SwitchToLightTheme">
             <summary>
             切换为 LightTheme
@@ -1836,6 +1853,20 @@
             <param name="obj"></param>
             <param name="value"></param>
         </member>
+        <member name="M:CommonUITools.Utils.ContextMenuHelper.SetOpeningBottomStoryboard(System.Windows.DependencyObject,System.Windows.Media.Animation.Storyboard)">
+            <summary>
+            Open Storyboard
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.ContextMenuHelper.SetOpeningTopStoryboard(System.Windows.DependencyObject,System.Windows.Media.Animation.Storyboard)">
+            <summary>
+            OpeningTopStoryboard
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
         <member name="M:CommonUITools.Utils.ContextMenuHelper.ShowContextMenuHandler(System.Object,System.Windows.Input.MouseButtonEventArgs)">
             <summary>
             显示 ContextMenu
@@ -1890,6 +1921,11 @@
             </summary>
             <param name="obj"></param>
             <param name="value"></param>
+        </member>
+        <member name="T:CommonUITools.Utils.RevealBackgroundHelper">
+            <summary>
+            RevealBackgroundHelper
+            </summary>
         </member>
         <member name="M:CommonUITools.Utils.RevealBackgroundHelper.SetIsEnabled(System.Windows.DependencyObject,System.Boolean)">
             <summary>
@@ -2032,6 +2068,98 @@
             NumberBoxStyleHelper
             </summary>
         </member>
+        <member name="T:CommonUITools.Utils.PopupHelper">
+            <summary>
+            ControlHelper
+            </summary>
+        </member>
+        <member name="M:CommonUITools.Utils.PopupHelper.SetEnableStylePopup(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            设置 Popup 样式
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.PopupHelper.SetPlacementTarget(System.Windows.DependencyObject,System.Windows.UIElement)">
+            <summary>
+            When cannot get PlacementTarget for this popup, this works
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.PopupHelper.SetPopupBottomStoryboard(System.Windows.DependencyObject,System.Windows.Media.Animation.Storyboard)">
+            <summary>
+            Popup bottom Storyboard
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.PopupHelper.SetPopupTopStoryboard(System.Windows.DependencyObject,System.Windows.Media.Animation.Storyboard)">
+            <summary>
+            Popup Top Storyboard
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.PopupHelper.SetPopupParent(System.Windows.DependencyObject,System.Windows.Controls.Control)">
+            <summary>
+            The parent of popup
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.PopupHelper.PopupOpenedHandler(System.Object,System.EventArgs)">
+            <summary>
+            Begin animation
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.HelperUtils.CreateOpeningStoryboard(System.Windows.UIElement,System.Boolean)">
+            <summary>
+            OpeningStoryboard
+            </summary>
+            <param name="element"></param>
+            <param name="topToBottom"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonUITools.Utils.HelperUtils.AlignCenterParent(System.Windows.Controls.Primitives.Popup)">
+            <summary>
+            Center popup to parent
+            </summary>
+            <param name="popup"></param>
+        </member>
+        <member name="M:CommonUITools.Utils.HelperUtils.FindTemplateChild``1(System.Windows.Controls.Control,System.String)">
+            <summary>
+            Find Template child
+            </summary>
+            <param name="control"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CommonUITools.Utils.WindowHelper">
+            <summary>
+            WindowHelper
+            </summary>
+        </member>
+        <member name="M:CommonUITools.Utils.WindowHelper.SetBackDropStyle(System.Windows.DependencyObject,CommonUITools.Model.BackdropStyle)">
+            <summary>
+            BackDropStyle
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="P:CommonUITools.Utils.WindowHelper.IsSystemSupport">
+            <summary>
+            Is system support feature
+            </summary>
+        </member>
+        <member name="M:CommonUITools.Utils.WindowHelper.ApplyOptimalThemeStyle(System.Windows.Window)">
+            <summary>
+            Apply the optimal theme
+            </summary>
+            <param name="window"></param>
+        </member>
         <member name="M:CommonUITools.Utils.MessageBoxUtils.Info(System.String,System.Windows.DependencyObject,System.UInt32)">
             <summary>
             提示消息
@@ -2080,6 +2208,11 @@
             </summary>
             <inheritdoc cref="M:CommonUITools.Controls.NotificationBox.ShowNotification(System.String,System.String,System.Windows.DependencyObject,System.UInt32,CommonUITools.Model.MessageType,System.Action)"/>
         </member>
+        <member name="T:CommonUITools.Utils.PInvokeUtils">
+            <summary>
+            Window Backdrop
+            </summary>
+        </member>
         <member name="M:CommonUITools.Utils.PInvokeUtils.ShellExecuteW(System.IntPtr,System.String,System.String,System.String,System.String,CommonUITools.Model.ShowCommands)">
             <summary>
             Performs an operation on a specified file.
@@ -2099,6 +2232,16 @@
             </summary>
             <returns></returns>
             <see cref="!:https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime"/>
+        </member>
+        <member name="E:CommonUITools.Utils.SystemColorsHelper.SystemThemeChanged">
+            <summary>
+            Running on UI thread
+            </summary>
+        </member>
+        <member name="E:CommonUITools.Utils.SystemColorsHelper.SystemAccentColorChanged">
+            <summary>
+            Running on UI thread
+            </summary>
         </member>
         <member name="T:CommonUITools.Utils.UIUtils">
             <summary>
@@ -2375,6 +2518,13 @@
             <param name="newSource"></param>
             <returns></returns>
         </member>
+        <member name="M:CommonUITools.Utils.UIUtilsExtension.UpdateResourceDictionary(System.Windows.ResourceDictionary,System.Uri)">
+            <summary>
+            更新 ResourceDictionary
+            </summary>
+            <param name="resource"></param>
+            <param name="newSource"></param>
+        </member>
         <member name="M:CommonUITools.Utils.UIUtilsExtension.GetElementDataContext``1(System.Object)">
             <summary>
             获取 <paramref name="sender"/> 的 <see cref="P:System.Windows.FrameworkElement.DataContext"/>
@@ -2457,6 +2607,36 @@
             Clean dict
             </summary>
             <param name="window"></param>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
         </member>
     </members>
 </doc>
