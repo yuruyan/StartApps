@@ -15,7 +15,7 @@ public static class Utils {
             }
             IntPtr[] phicon = new IntPtr[_nIcons];
             uint[] piconid = new uint[_nIcons];
-            _ = PInvokeHelpers.PrivateExtractIcons(path, 0, 128, 128, phicon, piconid, _nIcons, 0);
+            _ = PInvokeHelpers.PrivateExtractIcons(path, 0, 48, 48, phicon, piconid, _nIcons, 0);
             Icon icon = Icon.FromHandle(phicon[0]);
             Bitmap bitmap = icon.ToBitmap();
             PInvokeHelpers.DestroyIcon(icon.Handle);
