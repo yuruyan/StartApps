@@ -1,6 +1,8 @@
 ﻿using CommonUITools.Model;
 using System.Collections.Specialized;
 using System.Security.Principal;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace StartApp.View;
 
@@ -614,6 +616,22 @@ public partial class MainView : System.Windows.Controls.Page {
             return;
         }
         if (sender is FrameworkElement element && element.DataContext is AppTask task) {
+            await HandleModifyCommandAsync(task);
+        }
+    }
+
+    /// <summary>
+    /// 按下 Enter 修改
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void AppTaskListBoxKeyUpHandler(object sender, KeyEventArgs e) {
+        e.Handled = true;
+        if (e.Key != Key.Enter) {
+            return;
+        }
+
+        if (AppTaskListBox.SelectedItem is AppTask task) {
             await HandleModifyCommandAsync(task);
         }
     }

@@ -144,6 +144,7 @@
       dd:DragDrop.IsDropTarget="True"
       dd:DragDrop.UseDefaultDragAdorner="True"
       ItemsSource="{Binding AppTasks}"
+      KeyUp="AppTaskListBoxKeyUpHandler"
       SelectionMode="Extended">
       <ListBox.ItemTemplate>
         <DataTemplate>

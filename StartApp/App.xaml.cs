@@ -2,6 +2,8 @@
 using MessageBox = System.Windows.MessageBox;
 
 public partial class App : Application {
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
     protected override void OnStartup(StartupEventArgs e) {
         base.OnStartup(e);
 
@@ -23,23 +25,7 @@ public partial class App : Application {
     }
 
     private void GlobalDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
-        e.Handled = true;
-        if (e.Exception is System.Runtime.InteropServices.COMException comException) {
-            if (comException.ErrorCode == -2147221040) {
-                return;
-            }
-        }
-        // 其他处理
-        if (e.Exception is InvalidOperationException
-            || e.Exception is IOException
-        ) {
-            MessageBox.Show(
-                Current.MainWindow,
-                e.Exception.Message,
-                "错误",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error
-            );
-        }
+        Logger.Fatal(e.Exception);
+        Environment.Exit(-1);
     }
 }
