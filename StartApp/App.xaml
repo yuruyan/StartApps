@@ -12,7 +12,6 @@
         <ui:ThemeResources />
         <ui:XamlControlsResources />
         <ResourceDictionary Source="/CommonUITools;component/Themes/Generic.xaml" />
-        <ResourceDictionary Source="/StartApp;component/Resources/StyleResources.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>
