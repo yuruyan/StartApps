@@ -31,7 +31,7 @@
   <Page.Resources>
     <ContextMenu x:Key="TaskItemContextMenu">
       <ContextMenu.Resources>
-        <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
+        <Style BasedOn="{StaticResource ColorIconFontStyle}" TargetType="TextBlock" />
       </ContextMenu.Resources>
       <MenuItem Click="RunTaskClickHandler" Header="立即运行">
         <MenuItem.Icon>
