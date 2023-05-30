@@ -1,8 +1,6 @@
 ﻿using CommonUITools.Model;
 using System.Collections.Specialized;
 using System.Security.Principal;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace StartApp.View;
 

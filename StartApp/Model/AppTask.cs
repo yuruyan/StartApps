@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json.Serialization;
-using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
