@@ -6,6 +6,7 @@
   xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
   xmlns:local="clr-namespace:StartApp.View"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:tools="wpf-common-ui-tools"
   xmlns:ui="http://schemas.modernwpf.com/2019"
   xmlns:widget="clr-namespace:StartApp.Widget"
   Name="MainViewRoot"
@@ -29,6 +30,30 @@
       Executed="PasteExecutedHandler" />
   </Page.CommandBindings>
   <Page.Resources>
+    <ContextMenu x:Key="TaskContextMenu" tools:ContextMenuHelper.CenterHorizontal="False">
+      <ContextMenu.Resources>
+        <Style BasedOn="{StaticResource GlobalSingleIconButtonStyle}" TargetType="Button" />
+        <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
+      </ContextMenu.Resources>
+      <!--  开始运行  -->
+      <MenuItem Click="StartRunningAllTasksClickHandler" Header="开始运行">
+        <MenuItem.Icon>
+          <TextBlock Foreground="{StaticResource SuccessBackground}" Text="&#xe670;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  以管理员身份运行  -->
+      <MenuItem Click="StartRunningAllTasksAsAdminClickHandler" Header="以管理员身份运行">
+        <MenuItem.Icon>
+          <TextBlock Foreground="{StaticResource ErrorBackground}" Text="&#xe670;" />
+        </MenuItem.Icon>
+      </MenuItem>
+      <!--  添加任务  -->
+      <MenuItem Click="AddTaskClickHandler" Header="添加任务">
+        <MenuItem.Icon>
+          <TextBlock Text="&#xe604;" />
+        </MenuItem.Icon>
+      </MenuItem>
+    </ContextMenu>
     <ContextMenu x:Key="TaskItemContextMenu">
       <ContextMenu.Resources>
         <Style BasedOn="{StaticResource ColorIconFontStyle}" TargetType="TextBlock" />
@@ -110,31 +135,14 @@
       <RowDefinition />
     </Grid.RowDefinitions>
     <StackPanel
-      Margin="6,0"
-      HorizontalAlignment="Right"
+      Height="{StaticResource ResourceKey={x:Static ui:TitleBar.HeightKey}}"
+      HorizontalAlignment="Left"
       Orientation="Horizontal">
-      <StackPanel.Resources>
-        <Style BasedOn="{StaticResource GlobalSingleIconButtonStyle}" TargetType="Button" />
-        <Style BasedOn="{StaticResource IconFontStyle}" TargetType="TextBlock" />
-      </StackPanel.Resources>
-      <!--  以管理员身份运行  -->
-      <Button
-        Click="StartRunningAllTasksAsAdminClickHandler"
-        Content="&#xe670;"
-        Foreground="{StaticResource ErrorBackground}"
-        ToolTip="以管理员身份运行" />
-      <!--  开始运行  -->
-      <Button
-        Click="StartRunningAllTasksClickHandler"
-        Content="&#xe670;"
-        Foreground="{StaticResource SuccessBackground}"
-        ToolTip="开始运行" />
-      <!--  添加任务  -->
-      <Button
-        Click="AddTaskClickHandler"
-        Content="&#xe604;"
-        ToolTip="添加任务" />
+      <ui:TitleBarButton tools:ContextMenuHelper.OpenOnMouseLeftClick="True" ContextMenu="{StaticResource TaskContextMenu}">
+        <TextBlock Style="{StaticResource IconFontStyle}" Text="&#xe61d;" />
+      </ui:TitleBarButton>
     </StackPanel>
+
     <!--  任务列表  -->
     <ListBox
       Name="AppTaskListBox"
