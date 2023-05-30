@@ -1,5 +1,4 @@
 ﻿namespace StartApp;
-using MessageBox = System.Windows.MessageBox;
 
 public partial class App : Application {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -18,12 +17,14 @@ public partial class App : Application {
     }
 
     private void TaskSchedulerUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e) {
-        MessageBox.Show(e.Exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        Logger.Warn(e.Exception);
+        e.SetObserved();
     }
 
     private void DomainUnhandledException(object sender, UnhandledExceptionEventArgs e) {
         if (e.ExceptionObject is Exception exception) {
-            Shutdown();
+            Logger.Fatal(exception);
+            Environment.Exit(-1);
         }
     }
 
