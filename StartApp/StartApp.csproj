@@ -10,10 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="favicon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="favicon.png" />
     <Resource Include="Resources\iconfont.ttf" />
   </ItemGroup>
 

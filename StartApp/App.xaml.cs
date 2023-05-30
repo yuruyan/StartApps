@@ -12,6 +12,9 @@ public partial class App : Application {
         AppDomain.CurrentDomain.UnhandledException += DomainUnhandledException;
         TaskScheduler.UnobservedTaskException += TaskSchedulerUnobservedTaskException;
         #endregion
+
+        new SplashScreen("favicon.png").Show(true);
+        new MainWindow().Show();
     }
 
     private void TaskSchedulerUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e) {
