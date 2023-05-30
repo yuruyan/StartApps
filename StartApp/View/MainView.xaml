@@ -138,7 +138,10 @@
       Height="{StaticResource ResourceKey={x:Static ui:TitleBar.HeightKey}}"
       HorizontalAlignment="Left"
       Orientation="Horizontal">
-      <ui:TitleBarButton tools:ContextMenuHelper.OpenOnMouseLeftClick="True" ContextMenu="{StaticResource TaskContextMenu}">
+      <ui:TitleBarButton
+        tools:ContextMenuHelper.OpenOnMouseLeftClick="True"
+        ContextMenu="{StaticResource TaskContextMenu}"
+        ContextMenuService.IsEnabled="False">
         <TextBlock
           Opacity="0.6"
           Style="{StaticResource IconFontStyle}"
