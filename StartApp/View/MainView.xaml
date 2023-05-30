@@ -147,6 +147,13 @@
           Style="{StaticResource IconFontStyle}"
           Text="&#xe61d;" />
       </ui:TitleBarButton>
+      <ui:SimpleStackPanel VerticalAlignment="Center" Orientation="Horizontal">
+        <Image
+          Width="{StaticResource SystemFontSize}"
+          Source="/favicon.ico"
+          Stretch="Uniform" />
+        <TextBlock Text="StartApp" />
+      </ui:SimpleStackPanel>
     </StackPanel>
 
     <!--  任务列表  -->

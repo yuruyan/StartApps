@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Favicon.ico" />
+    <Resource Include="Favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
