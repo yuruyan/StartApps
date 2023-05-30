@@ -10,7 +10,7 @@ public partial class TaskDialog : BaseDialog {
         set { SetValue(AppTaskProperty, value); }
     }
 
-    public TaskDialog() {
+    public TaskDialog() : base(true) {
         InitializeComponent();
         this.EnableAutoResize(
             (double)Resources["RegexListItemsControlMinWidth"]
