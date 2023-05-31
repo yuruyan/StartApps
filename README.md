@@ -1,5 +1,5 @@
 # StartApp
 
-![Light Mode](https://github.com/Luxiu123/StartApps/blob/master/Docs/Images/LightTheme.png?raw=true)
+![Light Mode](https://raw.githubusercontent.com/Luxiu123/StartApps/master/Docs/Images/LightTheme.png)
 
-![Dark Mode](https://github.com/Luxiu123/StartApps/blob/master/Docs/Images/DarkTheme.png?raw=true)
+![Dark Mode](https://raw.githubusercontent.com/Luxiu123/StartApps/master/Docs/Images/DarkTheme.png)
