@@ -3,6 +3,10 @@
 public partial class App : Application {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+    public App() {
+        new SplashScreen("favicon.png").Show(true);
+    }
+
     protected override void OnStartup(StartupEventArgs e) {
         base.OnStartup(e);
 
@@ -12,7 +16,6 @@ public partial class App : Application {
         TaskScheduler.UnobservedTaskException += TaskSchedulerUnobservedTaskException;
         #endregion
 
-        new SplashScreen("favicon.png").Show(true);
         new MainWindow().Show();
     }
 
