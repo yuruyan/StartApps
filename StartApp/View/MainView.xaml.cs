@@ -6,12 +6,14 @@ namespace StartApp.View;
 
 public partial class MainView : System.Windows.Controls.Page {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-    private const string ConfigurationPath = "Data.json";
-    // 启动应用程序
-    private const string StartAppBootPath = "StartAppBoot.exe";
+    private const string ConfigurationName = "Data.json";
+    private const string StartAppBootName = "StartAppBoot.exe";
+    private static readonly string StartAppBootPath = Path.Join(Utils.ProcessDirectory, StartAppBootName);
+    private static readonly string ConfigurationPath = Path.Join(Utils.ProcessDirectory, ConfigurationName);
     private const double DelayVisibleThreshold = 520;
     private const double PathVisibleThreshold = 800;
-    public static readonly DependencyPropertyKey AppTasksPropertyKey = DependencyProperty.RegisterReadOnly("AppTasks", typeof(ExtendedObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
+
+    private static readonly DependencyPropertyKey AppTasksPropertyKey = DependencyProperty.RegisterReadOnly("AppTasks", typeof(ExtendedObservableCollection<AppTask>), typeof(MainView), new PropertyMetadata());
     public static readonly DependencyProperty AppTasksProperty = AppTasksPropertyKey.DependencyProperty;
     public static readonly DependencyProperty IsPathVisibleProperty = DependencyProperty.Register("IsPathVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
     public static readonly DependencyProperty IsDelayVisibleProperty = DependencyProperty.Register("IsDelayVisible", typeof(bool), typeof(MainView), new PropertyMetadata(false));
@@ -221,7 +223,7 @@ public partial class MainView : System.Windows.Controls.Page {
         }
         var process = TaskUtils.Try(() => RunStartAppBoot(ConfigurationPath));
         if (process == null) {
-            MessageBoxUtils.Error($"启动程序 {StartAppBootPath} 失败");
+            MessageBoxUtils.Error($"启动程序 {StartAppBootName} 失败");
         }
     }
 
@@ -235,11 +237,11 @@ public partial class MainView : System.Windows.Controls.Page {
         }
         // 检查文件
         if (!File.Exists(StartAppBootPath)) {
-            MessageBoxUtils.Error($"{StartAppBootPath} 丢失");
+            MessageBoxUtils.Error($"{StartAppBootName} 不存在");
             return false;
         }
         if (!File.Exists(ConfigurationPath)) {
-            MessageBoxUtils.Error($"{ConfigurationPath} 丢失");
+            MessageBoxUtils.Error($"{ConfigurationName} 不存在");
             return false;
         }
         return true;
@@ -259,7 +261,7 @@ public partial class MainView : System.Windows.Controls.Page {
         var process = TaskUtils.Try(() => RunStartAppBoot(ConfigurationPath, true));
         // 失败
         if (process == null) {
-            MessageBoxUtils.Error($"启动程序 {StartAppBootPath} 失败");
+            MessageBoxUtils.Error($"启动程序 {StartAppBootName} 失败");
         }
     }
 
@@ -288,7 +290,7 @@ public partial class MainView : System.Windows.Controls.Page {
     private Process? RunStartAppBoot(string args, bool runAsAdmin = false) {
         // 不存在
         if (!File.Exists(StartAppBootPath)) {
-            MessageBoxUtils.Error($"{StartAppBootPath} 丢失");
+            MessageBoxUtils.Error($"{StartAppBootName} 不存在");
             return null;
         }
         // 普通模式
@@ -334,7 +336,7 @@ public partial class MainView : System.Windows.Controls.Page {
         var process = TaskUtils.Try(() => RunStartAppBoot(tempConfigFile, true));
         // 失败
         if (process == null) {
-            MessageBoxUtils.Error($"启动程序 {StartAppBootPath} 失败");
+            MessageBoxUtils.Error($"启动程序 {StartAppBootName} 失败");
         }
     }
 

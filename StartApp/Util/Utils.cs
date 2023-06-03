@@ -1,6 +1,18 @@
 ﻿namespace StartApp.Util;
 
 public static class Utils {
+    private static readonly string _ProcessPath = Environment.ProcessPath!;
+    private static readonly string _ProcessDirectory = Path.GetDirectoryName(Environment.ProcessPath!)!;
+
+    /// <summary>
+    /// Current process path
+    /// </summary>
+    public static string ProcessPath => _ProcessPath;
+    /// <summary>
+    /// Current process directory
+    /// </summary>
+    public static string ProcessDirectory => _ProcessDirectory;
+
     /// <summary>
     /// 获取可执行程序图标
     /// </summary>
