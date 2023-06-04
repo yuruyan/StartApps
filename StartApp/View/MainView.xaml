@@ -152,7 +152,7 @@
           Width="{StaticResource SystemFontSize}"
           Source="/favicon.ico"
           Stretch="Uniform" />
-        <TextBlock Text="StartApp" />
+        <TextBlock Foreground="{DynamicResource ApplicationForegroundBrush}" Text="StartApp" />
       </ui:SimpleStackPanel>
     </StackPanel>
 
