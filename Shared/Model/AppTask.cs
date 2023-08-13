@@ -32,4 +32,9 @@ public class AppTaskPO {
     /// 是否启用
     /// </summary>
     public bool IsEnabled { get; set; }
+    /// <summary>
+    /// 以管理员身份运行
+    /// </summary>
+    [JsonProperty("runAsAdmin")]
+    public bool RunAsAdministrator { get; set; }
 }

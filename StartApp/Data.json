@@ -10,7 +10,8 @@
   },
   {
     "name": "任务管理器",
-    "path": "C:\\WINDOWS\\system32\\Taskmgr.exe"
+    "path": "C:\\WINDOWS\\system32\\Taskmgr.exe",
+    "runAsAdmin": true
   },
   {
     "name": "Notepad",
