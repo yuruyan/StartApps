@@ -14,6 +14,7 @@ public class AppTask : DependencyObject, ICloneable {
     public static readonly DependencyProperty ArgsProperty = DependencyProperty.Register("Args", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
     public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), typeof(AppTask), new PropertyMetadata(true));
     public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(AppTask), new PropertyMetadata());
+    public static readonly DependencyProperty RunAsAdministratorProperty = DependencyProperty.Register("RunAsAdministrator", typeof(bool), typeof(AppTask), new PropertyMetadata(false));
 
     /// <summary>
     /// 规定 id 为 -1 时，该对象由 Clone 生成
@@ -45,6 +46,11 @@ public class AppTask : DependencyObject, ICloneable {
     public ImageSource ImageSource {
         get { return (ImageSource)GetValue(ImageSourceProperty); }
         set { SetValue(ImageSourceProperty, value); }
+    }
+    [JsonProperty("runAsAdmin")]
+    public bool RunAsAdministrator {
+        get { return (bool)GetValue(RunAsAdministratorProperty); }
+        set { SetValue(RunAsAdministratorProperty, value); }
     }
 
     private static async void PathPropertyChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e) {

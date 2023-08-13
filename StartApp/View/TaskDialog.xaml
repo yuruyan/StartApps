@@ -16,8 +16,8 @@
   PrimaryButtonText="确定"
   mc:Ignorable="d">
   <tools:BaseDialog.Resources>
-    <system:Double x:Key="HeaderWidth">120</system:Double>
-    <system:Double x:Key="HeaderWithMarginWidth">121</system:Double>
+    <system:Double x:Key="HeaderWidth">140</system:Double>
+    <system:Double x:Key="HeaderWithMarginWidth">141</system:Double>
     <system:Double x:Key="ContentDialogMaxWidth">1000</system:Double>
     <system:Double x:Key="RegexListItemsControlMinWidth">300</system:Double>
     <system:Double x:Key="RegexListItemsControlMaxWidth">500</system:Double>
@@ -79,6 +79,10 @@
           SmallChange="500"
           SpinButtonPlacementMode="Compact"
           Value="{Binding AppTask.Delay}" />
+      </StackPanel>
+      <StackPanel>
+        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="以管理员身份运行" />
+        <ui:ToggleSwitch IsOn="{Binding AppTask.RunAsAdministrator}" />
       </StackPanel>
     </ui:SimpleStackPanel>
   </ScrollViewer>

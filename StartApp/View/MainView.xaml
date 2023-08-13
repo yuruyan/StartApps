@@ -42,11 +42,11 @@
         </MenuItem.Icon>
       </MenuItem>
       <!--  以管理员身份运行  -->
-      <MenuItem Click="StartRunningAllTasksAsAdminClickHandler" Header="以管理员身份运行">
+      <!--<MenuItem Click="StartRunningAllTasksAsAdminClickHandler" Header="以管理员身份运行">
         <MenuItem.Icon>
           <TextBlock Foreground="{StaticResource ErrorBackground}" Text="&#xe670;" />
         </MenuItem.Icon>
-      </MenuItem>
+      </MenuItem>-->
       <!--  添加任务  -->
       <MenuItem Click="AddTaskClickHandler" Header="添加任务">
         <MenuItem.Icon>
