@@ -42,13 +42,12 @@ void RunTask(IEnumerable<AppTaskPO> tasks, Task[] runningTasks, bool runAsAdmin)
     var shellProcessStartInfo = new ProcessStartInfo {
         FileName = "powershell.exe",
         RedirectStandardInput = true,
+        CreateNoWindow = true,
     };
-    // 非管理员身份
-    if (!runAsAdmin) {
-        shellProcessStartInfo.FileName = "explorer.exe";
-        shellProcessStartInfo.Arguments = $"powershell.exe";
+    Process? shellProcess = null;
+    if (runAsAdmin) {
+        shellProcess = Process.Start(shellProcessStartInfo);
     }
-    var shellProcess = Process.Start(shellProcessStartInfo);
     foreach (var item in tasks) {
         runningTasks[i++] = Task.Run(() => {
             // 延迟执行
@@ -56,12 +55,25 @@ void RunTask(IEnumerable<AppTaskPO> tasks, Task[] runningTasks, bool runAsAdmin)
                 Thread.Sleep(item.Delay);
             }
             Logger.Debug($"Starting process {item.Name}");
-            // 启动任务
-            var command = $"start \"{item.Path}\"";
-            if (!string.IsNullOrEmpty(item.Args)) {
-                command = command + $" -ArgumentList \"{item.Args.Replace("\"", "\\\"")}\"";
+            var taskEscapeQuote = item.Args.Replace("\"", "\\\"");
+            if (runAsAdmin) {
+                // 启动任务
+                var command = $"start \"{item.Path}\"";
+                if (!string.IsNullOrEmpty(item.Args)) {
+                    command += $" -ArgumentList \"{taskEscapeQuote}\"";
+                }
+                shellProcess?.StandardInput.WriteLine(command);
             }
-            shellProcess?.StandardInput.WriteLine(command);
+            // 非管理员身份
+            else {
+                var args = string.IsNullOrWhiteSpace(item.Args) ? string.Empty : taskEscapeQuote;
+                Process.Start(new ProcessStartInfo {
+                    FileName = "runas.exe",
+                    CreateNoWindow = true,
+                    // todo：根据程序架构选择 /machine 参数
+                    Arguments = $"/trustlevel:0x20000 /machine:amd64 \"{item.Path} {args}\""
+                });
+            }
         });
     }
     Task.WaitAll(runningTasks);
