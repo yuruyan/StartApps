@@ -35,32 +35,33 @@ RunTask(normalTasks, normalRunningTasks, false);
 RunTask(adminTasks, adminRunningTasks, true);
 
 void RunTask(IEnumerable<AppTaskPO> tasks, Task[] runningTasks, bool runAsAdmin) {
+    if (runningTasks.Length == 0) {
+        return;
+    }
     int i = 0;
+    var shellProcessStartInfo = new ProcessStartInfo {
+        FileName = "powershell.exe",
+        RedirectStandardInput = true,
+    };
+    // 非管理员身份
+    if (!runAsAdmin) {
+        shellProcessStartInfo.FileName = "explorer.exe";
+        shellProcessStartInfo.Arguments = $"powershell.exe";
+    }
+    var shellProcess = Process.Start(shellProcessStartInfo);
     foreach (var item in tasks) {
         runningTasks[i++] = Task.Run(() => {
             // 延迟执行
             if (item.Delay > 0) {
                 Thread.Sleep(item.Delay);
             }
-            try {
-                Logger.Debug($"Starting process {item.Name}");
-                // 启动任务
-                var filename = item.Path;
-                var args = item.Args;
-                // 非管理员身份
-                if (!runAsAdmin) {
-                    filename = "explorer.exe";
-                    args = $"{item.Path} {item.Args}";
-                }
-                var process = Process.Start(new ProcessStartInfo {
-                    FileName = filename,
-                    Arguments = args,
-                    UseShellExecute = true
-                }) ?? throw new Exception("Start process failed");
-            } catch (Exception error) {
-                Logger.Error($"Start process '{item.Name}' failed");
-                Logger.Error($"\t{error.Message}");
+            Logger.Debug($"Starting process {item.Name}");
+            // 启动任务
+            var command = $"start \"{item.Path}\"";
+            if (!string.IsNullOrEmpty(item.Args)) {
+                command = command + $" -ArgumentList \"{item.Args.Replace("\"", "\\\"")}\"";
             }
+            shellProcess?.StandardInput.WriteLine(command);
         });
     }
     Task.WaitAll(runningTasks);
