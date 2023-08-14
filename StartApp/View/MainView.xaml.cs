@@ -273,7 +273,7 @@ public partial class MainView : System.Windows.Controls.Page {
         // 是否需要以管理员身份运行
         var requireAdmin = AppTasks.Any(task => task.IsEnabled && task.RunAsAdministrator);
         // 管理员身份运行
-        if (runAsAdmin is true || requireAdmin) {
+        if (runAsAdmin is true || runAsAdmin is null && requireAdmin) {
             return Process.Start(new ProcessStartInfo {
                 FileName = StartAppBootPath,
                 Arguments = args,
@@ -306,18 +306,20 @@ public partial class MainView : System.Windows.Controls.Page {
         var tasksCopy = new AppTask[selectedTasks.Count];
         selectedTasks.CopyTo(tasksCopy, 0);
         var poList = Mapper.Instance.Map<IEnumerable<AppTaskPO>>(tasksCopy);
+        var requireAdmin = false;
         // 立即运行设置
         foreach (AppTaskPO po in poList) {
             po.Delay = 0;
             po.IsEnabled = true;
             po.RunAsAdministrator = runAsAdmin || po.RunAsAdministrator;
+            requireAdmin |= po.RunAsAdministrator;
         }
         string jsonData = JsonConvert.SerializeObject(poList);
         // 写入临时文件
         await File.WriteAllTextAsync(TempConfigFile, jsonData);
         #endregion
         // 启动 StartAppBoot
-        var process = TaskUtils.Try(() => RunStartAppBoot(TempConfigFile, runAsAdmin));
+        var process = TaskUtils.Try(() => RunStartAppBoot(TempConfigFile, requireAdmin));
         // 失败
         if (process == null) {
             MessageBoxUtils.Error($"启动程序 {StartAppBootName} 失败");
