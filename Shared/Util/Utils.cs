@@ -1,4 +1,9 @@
-﻿namespace StartApp.Util;
+﻿using CommonTools.Model;
+using CommonTools.Utils;
+using System.Drawing;
+using System.Drawing.Imaging;
+
+namespace Shared.Util;
 
 public static class Utils {
     private static readonly string _ProcessPath = Environment.ProcessPath!;
