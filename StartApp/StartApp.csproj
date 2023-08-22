@@ -31,20 +31,20 @@
     <When Condition=" '$(TargetFramework.StartsWith(`net7.0`))'=='true' ">
       <ItemGroup>
         <Reference Include="CommonTools">
-          <HintPath>Lib\Net7\CommonTools.dll</HintPath>
+          <HintPath>..\Shared\Lib\Net7\CommonTools.dll</HintPath>
         </Reference>
         <Reference Include="CommonUITools">
-          <HintPath>Lib\Net7\CommonUITools.dll</HintPath>
+          <HintPath>..\Shared\Lib\Net7\CommonUITools.dll</HintPath>
         </Reference>
       </ItemGroup>
     </When>
     <When Condition=" '$(TargetFramework.StartsWith(`net6.0`))'=='true' ">
       <ItemGroup>
         <Reference Include="CommonTools">
-          <HintPath>Lib\Net6\CommonTools.dll</HintPath>
+          <HintPath>..\Shared\Lib\Net6\CommonTools.dll</HintPath>
         </Reference>
         <Reference Include="CommonUITools">
-          <HintPath>Lib\Net6\CommonUITools.dll</HintPath>
+          <HintPath>..\Shared\Lib\Net6\CommonUITools.dll</HintPath>
         </Reference>
       </ItemGroup>
     </When>
@@ -58,7 +58,6 @@
     <PackageReference Include="NLog" Version="5.1.2" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="SharpVectors" Version="1.8.1" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

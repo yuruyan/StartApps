@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace StartApp.Util;
+namespace Shared.Util;
 
 internal static class PInvokeHelpers {
     [DllImport("user32.dll", CharSet = CharSet.Auto)]

@@ -1,0 +1,53 @@
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+
+namespace StartAppBoot;
+
+/// <summary>
+/// 程序架构
+/// </summary>
+public enum ProgramArchitecture {
+    /// <summary>
+    /// x64架构
+    /// </summary>
+    X64,
+    /// <summary>
+    /// x86架构
+    /// </summary>
+    X86,
+    /// <summary>
+    /// 未知
+    /// </summary>
+    Unknown,
+}
+
+/// <summary>
+/// AppUtils
+/// </summary>
+public static class AppUtils {
+    private const string SigCheckFilename = "sigcheck64.exe";
+    /// <summary>
+    /// 获取程序架构
+    /// </summary>
+    /// <param name="path">文件路径</param>
+    /// <returns></returns>
+    public static ProgramArchitecture GetProgramArchitecture(string path) {
+        var proc = Process.Start(new ProcessStartInfo {
+            FileName = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath), SigCheckFilename),
+            RedirectStandardOutput = true,
+            Arguments = $"-nobanner \"{path}\"",
+        })!;
+        proc.WaitForExit();
+        var output = proc.StandardOutput.ReadToEnd();
+        //         MachineType:    64-bit
+        var match = Regex.Match(output, @"\s+MachineType:\s+(\d{2})-bit");
+        if (!match.Success) {
+            return ProgramArchitecture.Unknown;
+        }
+        return match.Groups[1].Value switch {
+            "86" => ProgramArchitecture.X86,
+            "64" => ProgramArchitecture.X64,
+            _ => ProgramArchitecture.Unknown,
+        };
+    }
+}
