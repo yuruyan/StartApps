@@ -1,7 +1,9 @@
 ﻿// 假设此程序以管理员身份运行
+using CommonTools.Utils;
 using Newtonsoft.Json;
 using NLog;
 using Shared.Model;
+using StartAppBoot;
 using System.Diagnostics;
 
 Logger Logger = LogManager.GetCurrentClassLogger();
@@ -67,11 +69,15 @@ void RunTask(IEnumerable<AppTaskPO> tasks, Task[] runningTasks, bool runAsAdmin)
             // 非管理员身份
             else {
                 var args = string.IsNullOrWhiteSpace(item.Args) ? string.Empty : taskEscapeQuote;
+                var arch = TaskUtils.Try(() => AppUtils.GetProgramArchitecture(item.Path));
+                var archArg = arch switch {
+                    ProgramArchitecture.X86 => arch.ToString(),
+                    _ => "amd64",
+                };
                 Process.Start(new ProcessStartInfo {
                     FileName = "runas.exe",
                     CreateNoWindow = true,
-                    // todo：根据程序架构选择 /machine 参数
-                    Arguments = $"/trustlevel:0x20000 /machine:amd64 \"{item.Path} {args}\""
+                    Arguments = $"/trustlevel:0x20000 /machine:{archArg} \"{item.Path} {args}\""
                 });
             }
         });

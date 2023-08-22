@@ -8,17 +8,17 @@ namespace StartAppBoot;
 /// </summary>
 public enum ProgramArchitecture {
     /// <summary>
-    /// x64架构
+    /// 未知
     /// </summary>
-    X64,
+    Unknown,
     /// <summary>
     /// x86架构
     /// </summary>
     X86,
     /// <summary>
-    /// 未知
+    /// x64架构
     /// </summary>
-    Unknown,
+    X64,
 }
 
 /// <summary>
