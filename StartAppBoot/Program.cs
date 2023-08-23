@@ -1,4 +1,4 @@
-﻿// 假设此程序以管理员身份运行
+﻿// 如果有管理员权限运行的任务，那么此程序是以管理员身份运行的
 using CommonTools.Utils;
 using Newtonsoft.Json;
 using NLog;
@@ -71,7 +71,7 @@ void RunTask(IEnumerable<AppTaskPO> tasks, Task[] runningTasks, bool runAsAdmin)
                 var args = string.IsNullOrWhiteSpace(item.Args) ? string.Empty : taskEscapeQuote;
                 var arch = TaskUtils.Try(() => AppUtils.GetProgramArchitecture(item.Path));
                 var archArg = arch switch {
-                    ProgramArchitecture.X86 => arch.ToString(),
+                    ProgramArchitecture.X86 => "x86",
                     _ => "amd64",
                 };
                 Process.Start(new ProcessStartInfo {

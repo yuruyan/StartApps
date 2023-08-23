@@ -62,6 +62,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\StartAppBoot\StartAppBoot.csproj" />
   </ItemGroup>
 
   <ItemGroup>

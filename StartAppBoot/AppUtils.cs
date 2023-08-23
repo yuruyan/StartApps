@@ -25,7 +25,7 @@ public enum ProgramArchitecture {
 /// AppUtils
 /// </summary>
 public static class AppUtils {
-    private const string SigCheckFilename = "sigcheck64.exe";
+    private const string SigCheckFilename = "Tools/sigcheck.exe";
     /// <summary>
     /// 获取程序架构
     /// </summary>
@@ -45,7 +45,7 @@ public static class AppUtils {
             return ProgramArchitecture.Unknown;
         }
         return match.Groups[1].Value switch {
-            "86" => ProgramArchitecture.X86,
+            "32" => ProgramArchitecture.X86,
             "64" => ProgramArchitecture.X64,
             _ => ProgramArchitecture.Unknown,
         };
