@@ -279,11 +279,16 @@ public partial class MainView : System.Windows.Controls.Page {
                 Arguments = args,
                 UseShellExecute = true,
                 WorkingDirectory = Utils.ProcessDirectory,
-                Verb = "RunAs"
+                Verb = "RunAs",
+                CreateNoWindow = true,
             });
         }
         // 普通模式
-        return Process.Start(StartAppBootPath, args);
+        return Process.Start(new ProcessStartInfo {
+            FileName = StartAppBootPath,
+            Arguments = args,
+            CreateNoWindow = true
+        });
     }
 
     /// <summary>
