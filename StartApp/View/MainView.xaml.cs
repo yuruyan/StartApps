@@ -287,7 +287,7 @@ public partial class MainView : System.Windows.Controls.Page {
         return Process.Start(new ProcessStartInfo {
             FileName = StartAppBootPath,
             Arguments = args,
-            CreateNoWindow = true
+            CreateNoWindow = true,
         });
     }
 

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using Vanara.PInvoke;
 
 namespace StartAppBoot;
 
@@ -25,28 +24,19 @@ public enum ProgramArchitecture {
 /// AppUtils
 /// </summary>
 public static class AppUtils {
-    private const string SigCheckFilename = "Tools/sigcheck.exe";
     /// <summary>
     /// 获取程序架构
     /// </summary>
     /// <param name="path">文件路径</param>
     /// <returns></returns>
     public static ProgramArchitecture GetProgramArchitecture(string path) {
-        var proc = Process.Start(new ProcessStartInfo {
-            FileName = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath), SigCheckFilename),
-            RedirectStandardOutput = true,
-            Arguments = $"-nobanner \"{path}\"",
-        })!;
-        proc.WaitForExit();
-        var output = proc.StandardOutput.ReadToEnd();
-        //         MachineType:    64-bit
-        var match = Regex.Match(output, @"\s+MachineType:\s+(\d{2})-bit");
-        if (!match.Success) {
+        var isExe = Kernel32.GetBinaryType(path, out var type);
+        if (!isExe) {
             return ProgramArchitecture.Unknown;
         }
-        return match.Groups[1].Value switch {
-            "32" => ProgramArchitecture.X86,
-            "64" => ProgramArchitecture.X64,
+        return type switch {
+            Kernel32.SCS.SCS_32BIT_BINARY => ProgramArchitecture.X86,
+            Kernel32.SCS.SCS_64BIT_BINARY => ProgramArchitecture.X64,
             _ => ProgramArchitecture.Unknown,
         };
     }

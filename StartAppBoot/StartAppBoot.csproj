@@ -9,17 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.0.4" />
+    <PackageReference Include="Vanara.PInvoke.Kernel32" Version="3.4.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Tools\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <Choose>
