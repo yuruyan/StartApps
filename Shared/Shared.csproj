@@ -1,40 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <Platforms>x64</Platforms>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Platforms>x64</Platforms>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="NLog" Version="5.1.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+		<PackageReference Include="NLog" Version="5.1.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Nlog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Nlog.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <Choose>
-    <When Condition=" '$(TargetFramework.StartsWith(`net7.0`))'=='true' ">
-      <ItemGroup>
-        <Reference Include="CommonTools">
-          <HintPath>Lib\Net7\CommonTools.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition=" '$(TargetFramework.StartsWith(`net6.0`))'=='true' ">
-      <ItemGroup>
-        <Reference Include="CommonTools">
-          <HintPath>Lib\Net6\CommonTools.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
+	<ItemGroup>
+		<Reference Include="CommonTools">
+			<HintPath>Lib\Net7\CommonTools.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 </Project>

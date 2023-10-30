@@ -27,22 +27,8 @@
   <ScrollViewer x:Name="ContentScrollViewer">
     <ui:SimpleStackPanel KeyDown="PanelKeyDownHandler" Orientation="Vertical">
       <ui:SimpleStackPanel.Resources>
-        <Style
-          x:Key="HeaderTextBlockStyle"
-          BasedOn="{StaticResource GlobalTextBlockStyle}"
-          TargetType="TextBlock">
+        <Style x:Key="HeaderPanel" TargetType="Grid">
           <Setter Property="Width" Value="{StaticResource HeaderWidth}" />
-        </Style>
-        <Style
-          x:Key="HeaderTextBlockWithUnderlineStyle"
-          BasedOn="{StaticResource HeaderTextBlockStyle}"
-          TargetType="TextBlock">
-          <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-              <Setter Property="TextDecorations" Value="Underline" />
-              <Setter Property="Cursor" Value="Hand" />
-            </Trigger>
-          </Style.Triggers>
         </Style>
         <Style BasedOn="{StaticResource GlobalTextBoxStyle}" TargetType="TextBox">
           <Setter Property="Width" Value="{Binding ActualWidth, ElementName=ContentScrollViewer, Converter={StaticResource SubtractConverter}, ConverterParameter={StaticResource HeaderWithMarginWidth}}" />
@@ -56,23 +42,32 @@
         </Style>
       </ui:SimpleStackPanel.Resources>
       <StackPanel>
-        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="应用名" />
+        <Grid Style="{StaticResource HeaderPanel}">
+          <TextBlock Text="应用名" />
+        </Grid>
         <TextBox Text="{Binding AppTask.Name}" />
       </StackPanel>
       <StackPanel>
-        <TextBlock
-          MouseUp="OpenTaskDirectoryMouseUpHandler"
-          Style="{StaticResource HeaderTextBlockWithUnderlineStyle}"
-          Text="路径"
-          ToolTip="选择可执行文件" />
+        <Grid Style="{StaticResource HeaderPanel}">
+          <TextBlock
+            HorizontalAlignment="Left"
+            MouseUp="OpenTaskDirectoryMouseUpHandler"
+            Style="{StaticResource HyperLinkStyle}"
+            Text="路径"
+            ToolTip="选择可执行文件" />
+        </Grid>
         <TextBox Text="{Binding AppTask.Path}" />
       </StackPanel>
       <StackPanel>
-        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="参数" />
+        <Grid Style="{StaticResource HeaderPanel}">
+          <TextBlock Text="参数" />
+        </Grid>
         <TextBox Text="{Binding AppTask.Args}" />
       </StackPanel>
       <StackPanel Margin="0,0,0,1">
-        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="延迟执行(ms)" />
+        <Grid Style="{StaticResource HeaderPanel}">
+          <TextBlock Text="延迟执行(ms)" />
+        </Grid>
         <ui:NumberBox
           Maximum="2147483647"
           Minimum="0"
@@ -81,7 +76,9 @@
           Value="{Binding AppTask.Delay}" />
       </StackPanel>
       <StackPanel>
-        <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="以管理员身份运行" />
+        <Grid Style="{StaticResource HeaderPanel}">
+          <TextBlock Text="以管理员身份运行" />
+        </Grid>
         <ui:ToggleSwitch IsOn="{Binding AppTask.RunAsAdministrator}" />
       </StackPanel>
     </ui:SimpleStackPanel>
