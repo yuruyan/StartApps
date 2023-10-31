@@ -222,10 +222,9 @@ public partial class MainView : System.Windows.Controls.Page {
         if (!CheckRunningTask()) {
             return;
         }
-        var process = TaskUtils.Try(() => RunStartAppBoot(ConfigurationPath));
-        if (process == null) {
-            MessageBoxUtils.Error($"启动程序 {StartAppBootName} 失败");
-        }
+        TaskUtils.Try(() => RunStartAppBoot(
+            Mapper.Instance.Map<IList<AppTaskPO>>(AppTasks)
+        ));
     }
 
     /// <summary>
@@ -261,34 +260,58 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <summary>
     /// 启动 StartAppBoot，with Notification
     /// </summary>
-    /// <param name="args">运行参数，不检查此</param>
-    /// <param name="runAsAdmin">以管理员身份启动</param>
+    /// <param name="appTasks"></param>
     /// <returns></returns>
-    private Process? RunStartAppBoot(string args, bool? runAsAdmin = null) {
-        // 不存在
-        if (!File.Exists(StartAppBootPath)) {
-            MessageBoxUtils.Error($"{StartAppBootName} 不存在");
-            return null;
+    private void RunStartAppBoot(IEnumerable<AppTaskPO> appTasks) {
+        appTasks = appTasks.Where(task => task.IsEnabled);
+        if (!appTasks.Any()) {
+            return;
         }
-        // 是否需要以管理员身份运行
-        var requireAdmin = AppTasks.Any(task => task.IsEnabled && task.RunAsAdministrator);
-        // 管理员身份运行
-        if (runAsAdmin is true || runAsAdmin is null && requireAdmin) {
-            return Process.Start(new ProcessStartInfo {
-                FileName = StartAppBootPath,
-                Arguments = args,
-                UseShellExecute = true,
-                WorkingDirectory = Utils.ProcessDirectory,
-                Verb = "RunAs",
-                CreateNoWindow = true,
-            });
+
+        var normalTasks = appTasks.Where(task => !task.RunAsAdministrator).ToList();
+        var adminTasks = appTasks.Where(task => task.RunAsAdministrator).ToList();
+        var normalConfigPath = Path.GetTempFileName();
+        var adminConfigPath = Path.GetTempFileName();
+
+        // 写入配置文件
+        try {
+            if (normalTasks.Count > 0) {
+                File.WriteAllText(normalConfigPath, JsonConvert.SerializeObject(normalTasks));
+            }
+            if (adminTasks.Count > 0) {
+                File.WriteAllText(adminConfigPath, JsonConvert.SerializeObject(adminTasks));
+            }
+        } catch (Exception error) {
+            MessageBoxUtils.Error("写入临时文件失败");
+            Logger.Error(error);
+            return;
         }
-        // 普通模式
-        return Process.Start(new ProcessStartInfo {
-            FileName = StartAppBootPath,
-            Arguments = args,
-            CreateNoWindow = true,
-        });
+
+        // 启动程序
+        try {
+            if (normalTasks.Count > 0) {
+                Process.Start(new ProcessStartInfo {
+                    FileName = StartAppBootPath,
+                    Arguments = normalConfigPath,
+                    CreateNoWindow = true,
+                });
+            }
+            if (adminTasks.Count > 0) {
+                Process.Start(new ProcessStartInfo {
+                    FileName = StartAppBootPath,
+                    Arguments = adminConfigPath,
+                    UseShellExecute = true,
+                    Verb = "RunAs",
+                    CreateNoWindow = true,
+                });
+            }
+        } catch (Exception error) {
+            MessageBoxUtils.Error("启动程序失败");
+            Logger.Error(error);
+            return;
+        }
+
+        return;
     }
 
     /// <summary>
@@ -301,34 +324,29 @@ public partial class MainView : System.Windows.Controls.Page {
         RunSelectedTasks(true);
     }
 
-    private async void RunSelectedTasks(bool runAsAdmin) {
+    /// <summary>
+    /// 运行选中项
+    /// </summary>
+    /// <param name="runAsAdmin">是否以管理员身份启动</param>
+    private void RunSelectedTasks(bool runAsAdmin) {
         var selectedTasks = AppTaskListBox.SelectedItems;
         // 意外情况
         if (selectedTasks.Count == 0) {
             return;
         }
-        #region 写入临时文件
-        var tasksCopy = new AppTask[selectedTasks.Count];
-        selectedTasks.CopyTo(tasksCopy, 0);
-        var poList = Mapper.Instance.Map<IEnumerable<AppTaskPO>>(tasksCopy);
-        var requireAdmin = false;
-        // 立即运行设置
-        foreach (AppTaskPO po in poList) {
-            po.Delay = 0;
-            po.IsEnabled = true;
-            po.RunAsAdministrator = runAsAdmin || po.RunAsAdministrator;
-            requireAdmin |= po.RunAsAdministrator;
+        var tasks = Mapper.Instance.Map<List<AppTask>>(selectedTasks.OfType<AppTask>());
+        tasks.ForEach(task => {
+            task.IsEnabled = true;
+            task.Delay = 0;
+        });
+        // run all tasks as admin
+        if (runAsAdmin) {
+            tasks.ForEach(task => task.RunAsAdministrator = true);
         }
-        string jsonData = JsonConvert.SerializeObject(poList);
-        // 写入临时文件
-        await File.WriteAllTextAsync(TempConfigFile, jsonData);
-        #endregion
         // 启动 StartAppBoot
-        var process = TaskUtils.Try(() => RunStartAppBoot(TempConfigFile, requireAdmin));
-        // 失败
-        if (process == null) {
-            MessageBoxUtils.Error($"启动程序 {StartAppBootName} 失败");
-        }
+        TaskUtils.Try(() => RunStartAppBoot(
+            Mapper.Instance.Map<IList<AppTaskPO>>(tasks)
+        ));
     }
 
     /// <summary>
