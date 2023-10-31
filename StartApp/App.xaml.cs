@@ -2,6 +2,23 @@
 
 public partial class App : Application {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+    public static string AppDirectory { get; }
+
+    static App() {
+        AppDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            nameof(StartApp)
+        );
+        // 创建 StartApp 文件夹
+        try {
+            Directory.CreateDirectory(AppDirectory);
+        } catch (Exception error) {
+            Logger.Fatal(error);
+            System.Windows.MessageBox.Show($"创建文件夹StartApp失败", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Environment.Exit(-1);
+            return;
+        }
+    }
 
     public App() {
         new SplashScreen("favicon.png").Show(true);

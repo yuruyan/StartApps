@@ -9,8 +9,7 @@ public partial class MainView : System.Windows.Controls.Page {
     private const string ConfigurationName = "Data.json";
     private const string StartAppBootName = "StartAppBoot.exe";
     private static readonly string StartAppBootPath = Path.Join(Utils.ProcessDirectory, StartAppBootName);
-    private static readonly string ConfigurationPath = Path.Join(Utils.ProcessDirectory, ConfigurationName);
-    private static readonly string TempConfigFile = Path.Combine(Utils.ProcessDirectory, "tempConfig.json");
+    private static readonly string ConfigurationPath = Path.Join(App.AppDirectory, ConfigurationName);
     private const double DelayVisibleThreshold = 520;
     private const double PathVisibleThreshold = 800;
 
