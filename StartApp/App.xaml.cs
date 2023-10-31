@@ -1,10 +1,21 @@
 ﻿namespace StartApp;
 
 public partial class App : Application {
-    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger Logger;
+    private const string NlogFileName = "nlog.config";
     public static string AppDirectory { get; }
 
     static App() {
+        #region 创建 Nlog
+        Environment.CurrentDirectory = Path.GetDirectoryName(Environment.ProcessPath)!;
+        // 创建 nlog
+        if (!File.Exists(NlogFileName)) {
+            File.WriteAllText(NlogFileName, ResourceHelper.Nlog);
+        }
+        Logger = LogManager.GetCurrentClassLogger();
+        #endregion
+
+        #region 创建 APPDirectory
         AppDirectory = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             nameof(StartApp)
@@ -18,6 +29,7 @@ public partial class App : Application {
             Environment.Exit(-1);
             return;
         }
+        #endregion
     }
 
     public App() {

@@ -16,12 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Nlog.config">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Reference Include="CommonTools">
 			<HintPath>Lib\Net7\CommonTools.dll</HintPath>
 		</Reference>

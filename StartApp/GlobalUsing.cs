@@ -23,3 +23,4 @@ global using System.Threading.Tasks;
 global using System.Windows;
 global using System.Windows.Input;
 global using System.Windows.Threading;
+global using StartApp.Resources;
