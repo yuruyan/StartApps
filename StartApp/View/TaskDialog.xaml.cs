@@ -52,4 +52,15 @@ public partial class TaskDialog : BaseDialog {
             AppTask.Name = Path.GetFileNameWithoutExtension(AppTask.Path);
         }
     }
+
+    /// <summary>
+    /// 当清除输入框时，设置 Delay 为 0
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void DelayValueChangedHandler(NumberBox sender, NumberBoxValueChangedEventArgs args) {
+        if (double.IsNaN(sender.Value)) {
+            AppTask.Delay = 0;
+        }
+    }
 }

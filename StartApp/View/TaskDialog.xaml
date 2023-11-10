@@ -73,6 +73,7 @@
           Minimum="0"
           SmallChange="500"
           SpinButtonPlacementMode="Compact"
+          ValueChanged="DelayValueChangedHandler"
           Value="{Binding AppTask.Delay}" />
       </StackPanel>
       <StackPanel>
