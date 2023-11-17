@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<ApplicationIcon>Favicon.ico</ApplicationIcon>
@@ -50,24 +50,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Resources\ResourceHelper.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>ResourceHelper.resx</DependentUpon>
-	  </Compile>
+		<Compile Update="Resources\ResourceHelper.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>ResourceHelper.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Resources\ResourceHelper.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>ResourceHelper.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Resources\ResourceHelper.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>ResourceHelper.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Nlog.config">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Update="Nlog.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
