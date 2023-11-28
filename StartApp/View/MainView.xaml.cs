@@ -289,20 +289,10 @@ public partial class MainView : System.Windows.Controls.Page {
         // 启动程序
         try {
             if (normalTasks.Count > 0) {
-                Process.Start(new ProcessStartInfo {
-                    FileName = StartAppBootPath,
-                    Arguments = normalConfigPath,
-                    CreateNoWindow = true,
-                });
+                _ = StartAppAsync(normalConfigPath, false);
             }
             if (adminTasks.Count > 0) {
-                Process.Start(new ProcessStartInfo {
-                    FileName = StartAppBootPath,
-                    Arguments = adminConfigPath,
-                    UseShellExecute = true,
-                    Verb = "RunAs",
-                    CreateNoWindow = true,
-                });
+                _ = StartAppAsync(adminConfigPath, true);
             }
         } catch (Exception error) {
             MessageBoxUtils.Error("启动程序失败");
@@ -311,6 +301,21 @@ public partial class MainView : System.Windows.Controls.Page {
         }
 
         return;
+
+        static Task<Process?> StartAppAsync(string args, bool runasAdmin) {
+            return Task.Run(() => {
+                var info = new ProcessStartInfo {
+                    FileName = StartAppBootPath,
+                    Arguments = args,
+                    CreateNoWindow = true,
+                };
+                if (runasAdmin) {
+                    info.UseShellExecute = true;
+                    info.Verb = "RunAs";
+                }
+                return Process.Start(info);
+            });
+        }
     }
 
     /// <summary>
