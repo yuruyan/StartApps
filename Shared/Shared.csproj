@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -17,7 +17,7 @@
 
 	<ItemGroup>
 		<Reference Include="CommonTools">
-			<HintPath>Lib\Net7\CommonTools.dll</HintPath>
+			<HintPath>Lib\Net8\CommonTools.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 </Project>

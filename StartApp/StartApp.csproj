@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
@@ -29,10 +29,10 @@
 
 	<ItemGroup>
 		<Reference Include="CommonTools">
-			<HintPath>..\Shared\Lib\Net7\CommonTools.dll</HintPath>
+			<HintPath>..\Shared\Lib\Net8\CommonTools.dll</HintPath>
 		</Reference>
 		<Reference Include="CommonUITools">
-			<HintPath>..\Shared\Lib\Net7\CommonUITools.dll</HintPath>
+			<HintPath>..\Shared\Lib\Net8\CommonUITools.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 

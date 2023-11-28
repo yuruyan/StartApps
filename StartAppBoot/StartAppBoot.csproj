@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Platforms>x64</Platforms>
+		<PublishAot>true</PublishAot>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,10 +18,10 @@
 	</ItemGroup>
 
 	<Choose>
-		<When Condition=" '$(TargetFramework.StartsWith(`net7.0`))'=='true' ">
+		<When Condition=" '$(TargetFramework.StartsWith(`net8.0`))'=='true' ">
 			<ItemGroup>
 				<Reference Include="CommonTools">
-					<HintPath>..\Shared\Lib\Net7\CommonTools.dll</HintPath>
+					<HintPath>..\Shared\Lib\Net8\CommonTools.dll</HintPath>
 				</Reference>
 			</ItemGroup>
 		</When>
