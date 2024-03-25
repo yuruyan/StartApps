@@ -634,13 +634,13 @@ public partial class MainView : System.Windows.Controls.Page {
     }
 
     /// <summary>
-    /// 按下 Enter 修改
+    /// 按下 Space 修改
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private async void AppTaskListBoxKeyUpHandler(object sender, KeyEventArgs e) {
         e.Handled = true;
-        if (e.Key != Key.Enter) {
+        if (e.Key != Key.Space) {
             return;
         }
 
