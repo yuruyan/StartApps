@@ -2,16 +2,15 @@
 
 public partial class App : Application {
     private static readonly Logger Logger;
-    private const string NlogFileName = "nlog.config";
     public static string AppDirectory { get; }
 
     static App() {
         #region 创建 Nlog
         Environment.CurrentDirectory = Path.GetDirectoryName(Environment.ProcessPath)!;
-        // 创建 nlog
-        if (!File.Exists(NlogFileName)) {
-            File.WriteAllText(NlogFileName, ResourceHelper.Nlog);
-        }
+        NLog.LogManager.Setup().LoadConfiguration(builder => {
+            builder.ForLogger().FilterMinLevel(LogLevel.Info).WriteToConsole();
+            builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile(fileName: "app.log");
+        });
         Logger = LogManager.GetCurrentClassLogger();
         #endregion
 
