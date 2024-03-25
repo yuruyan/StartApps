@@ -29,15 +29,15 @@
 
 	<ItemGroup>
 		<Reference Include="CommonTools">
-			<HintPath>..\Shared\Lib\Net8\CommonTools.dll</HintPath>
+			<HintPath>..\Shared\Lib\CommonTools.dll</HintPath>
 		</Reference>
 		<Reference Include="CommonUITools">
-			<HintPath>..\Shared\Lib\Net8\CommonUITools.dll</HintPath>
+			<HintPath>..\Shared\Lib\CommonUITools.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="gong-wpf-dragdrop" Version="3.2.0" />
 		<PackageReference Include="ModernWpfUI" Version="0.9.6" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />

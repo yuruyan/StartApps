@@ -16,20 +16,9 @@
 		<ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
-	<Choose>
-		<When Condition=" '$(TargetFramework.StartsWith(`net8.0`))'=='true' ">
-			<ItemGroup>
-				<Reference Include="CommonTools">
-					<HintPath>..\Shared\Lib\Net8\CommonTools.dll</HintPath>
-				</Reference>
-			</ItemGroup>
-		</When>
-		<When Condition=" '$(TargetFramework.StartsWith(`net6.0`))'=='true' ">
-			<ItemGroup>
-				<Reference Include="CommonTools">
-					<HintPath>..\Shared\Lib\Net6\CommonTools.dll</HintPath>
-				</Reference>
-			</ItemGroup>
-		</When>
-	</Choose>
+	<ItemGroup>
+		<Reference Include="CommonTools">
+			<HintPath>..\Shared\Lib\CommonTools.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 </Project>
