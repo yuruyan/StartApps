@@ -62,40 +62,6 @@ public class AppTask : DependencyObject, ICloneable {
     }
 
     /// <summary>
-    /// 更新图标
-    /// </summary>
-    /// <param name="d"></param>
-    /// <param name="e"></param>
-    private static async void PathAndIconPropertyChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-        if (d is not AppTask task) {
-            return;
-        }
-        if (e.NewValue is not string path || !File.Exists(path)) {
-            return;
-        }
-        var iconPath = task.IconPath;
-        // 加载图标
-        if (File.Exists(iconPath)) {
-            var iconStream = await task.Dispatcher.InvokeAsync(() => TaskUtils.Try(iconPath.GetImageSource));
-            if (iconStream is not null) {
-                task.ImageSource = iconStream;
-                return;
-            }
-        }
-        var tempPath = task.Path;
-        // 从可执行文件加载图标
-        var stream = await Task.Run(() => Utils.GetExeBitmap(tempPath));
-        if (stream == null) {
-            return;
-        }
-        var bitmapImage = new BitmapImage();
-        bitmapImage.BeginInit();
-        bitmapImage.StreamSource = stream;
-        bitmapImage.EndInit();
-        task.ImageSource = bitmapImage;
-    }
-
-    /// <summary>
     /// 返回 id 为 -1 的新对象
     /// </summary>
     /// <returns></returns>
