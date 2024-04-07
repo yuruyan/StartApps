@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<None Remove="favicon.png" />
+		<None Remove="favicon_x32.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -20,6 +21,7 @@
 
 	<ItemGroup>
 		<Resource Include="favicon.png" />
+		<Resource Include="favicon_x32.png" />
 		<Resource Include="Resources\iconfont.ttf" />
 	</ItemGroup>
 

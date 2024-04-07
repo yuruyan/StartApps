@@ -64,7 +64,9 @@ public partial class AppTaskItem : UserControl {
         var iconPath = task.IconPath;
         // 加载图标
         if (File.Exists(iconPath)) {
-            var iconStream = await task.Dispatcher.InvokeAsync(() => TaskUtils.Try(iconPath.GetImageSource));
+            var iconStream = await task.Dispatcher.InvokeAsync(
+                () => TaskUtils.Try(() => iconPath.GetImageSource(32))
+            );
             if (iconStream is not null) {
                 task.ImageSource = iconStream;
                 return;
