@@ -29,10 +29,17 @@ public partial class AppTaskItem : UserControl {
         get { return (bool)GetValue(IsDelayVisibleProperty); }
         set { SetValue(IsDelayVisibleProperty, value); }
     }
+    private string Path = string.Empty;
+    private string IconPath = string.Empty;
 
     public AppTaskItem() {
         InitializeComponent();
     }
+
+    /// <summary>
+    /// 重新加载图标
+    /// </summary>
+    public void ReloadIcon() => AppTaskItemLoadedHandler(this, new RoutedEventArgs());
 
     /// <summary>
     /// 切换
@@ -42,6 +49,51 @@ public partial class AppTaskItem : UserControl {
     private void ToggledHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
         Toggled?.Invoke(sender, e);
+    }
+
+    /// <summary>
+    /// 加载图标
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void AppTaskItemLoadedHandler(object sender, RoutedEventArgs e) {
+        if (!ShouldReloadIcon()) {
+            return;
+        }
+        var task = this.AppTask;
+        var iconPath = task.IconPath;
+        // 加载图标
+        if (File.Exists(iconPath)) {
+            var iconStream = await task.Dispatcher.InvokeAsync(() => TaskUtils.Try(iconPath.GetImageSource));
+            if (iconStream is not null) {
+                task.ImageSource = iconStream;
+                return;
+            }
+        }
+        var tempPath = task.Path;
+        // 从可执行文件加载图标
+        var stream = await Task.Run(() => Utils.GetExeBitmap(tempPath));
+        if (stream == null) {
+            return;
+        }
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.StreamSource = stream;
+        bitmapImage.EndInit();
+        task.ImageSource = bitmapImage;
+    }
+
+    /// <summary>
+    /// 是否需要重新加载图标, 路径发生变化就需要重新加载
+    /// </summary>
+    /// <returns></returns>
+    private bool ShouldReloadIcon() {
+        if (Path != AppTask.Path || IconPath != AppTask.IconPath) {
+            Path = AppTask.Path;
+            IconPath = AppTask.IconPath;
+            return true;
+        }
+        return false;
     }
 }
 

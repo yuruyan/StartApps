@@ -1,6 +1,9 @@
 ﻿using CommonUITools.Model;
+using StartApp.Widget;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Security.Principal;
+using System.Windows.Controls;
 
 namespace StartApp.View;
 
@@ -399,12 +402,12 @@ public partial class MainView : System.Windows.Controls.Page {
     /// <param name="e"></param>
     private async void ModifyAppTaskClickHandler(object sender, RoutedEventArgs e) {
         e.Handled = true;
-        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
-            await HandleModifyCommandAsync(task);
+        if (sender is AppTaskItem element && element.DataContext is AppTask task) {
+            await HandleModifyCommandAsync(task, element);
         }
     }
 
-    private async Task HandleModifyCommandAsync(AppTask task) {
+    private async Task HandleModifyCommandAsync(AppTask task, AppTaskItem appTaskItem) {
         if (TaskDialog.IsVisible) {
             return;
         }
@@ -413,6 +416,7 @@ public partial class MainView : System.Windows.Controls.Page {
             return;
         }
         Mapper.Instance.Map(TaskDialog.AppTask, task);
+        appTaskItem.ReloadIcon();
         UpdateConfigurationAsync();
     }
 
@@ -628,8 +632,8 @@ public partial class MainView : System.Windows.Controls.Page {
         if (e.ChangedButton != MouseButton.Left) {
             return;
         }
-        if (sender is FrameworkElement element && element.DataContext is AppTask task) {
-            await HandleModifyCommandAsync(task);
+        if (sender is AppTaskItem element && element.DataContext is AppTask task) {
+            await HandleModifyCommandAsync(task, element);
         }
     }
 
@@ -643,9 +647,14 @@ public partial class MainView : System.Windows.Controls.Page {
         if (e.Key != Key.Space) {
             return;
         }
-
-        if (AppTaskListBox.SelectedItem is AppTask task) {
-            await HandleModifyCommandAsync(task);
+        if (sender is not ListBox listBox) {
+            return;
+        }
+        // Get appTaskItem from lisBox
+        var item = listBox.ItemContainerGenerator.ContainerFromIndex(listBox.SelectedIndex);
+        var appTaskItem = item.FindDescendantBy(o => o is AppTaskItem);
+        if (appTaskItem is AppTaskItem element && element.DataContext is AppTask task) {
+            await HandleModifyCommandAsync(task, element);
         }
     }
 }

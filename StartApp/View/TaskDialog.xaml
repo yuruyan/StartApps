@@ -64,6 +64,17 @@
         </Grid>
         <TextBox Text="{Binding AppTask.Args}" />
       </StackPanel>
+      <StackPanel>
+        <Grid Style="{StaticResource HeaderPanel}">
+          <TextBlock
+            HorizontalAlignment="Left"
+            MouseUp="OpenIconSelectionDialogMouseUpHandler"
+            Style="{StaticResource HyperLinkStyle}"
+            Text="图标"
+            ToolTip="选择图标" />
+        </Grid>
+        <TextBox Text="{Binding AppTask.IconPath}" />
+      </StackPanel>
       <StackPanel Margin="0,0,0,1">
         <Grid Style="{StaticResource HeaderPanel}">
           <TextBlock Text="延迟执行(ms)" />

@@ -10,11 +10,12 @@ public class AppTask : DependencyObject, ICloneable {
     public static readonly DependencyProperty IdProperty = DependencyProperty.Register("Id", typeof(int), typeof(AppTask), new PropertyMetadata(0));
     public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(int), typeof(AppTask), new PropertyMetadata(0));
     public static readonly DependencyProperty NameProperty = DependencyProperty.Register("Name", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
-    public static readonly DependencyProperty PathProperty = DependencyProperty.Register("Path", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty, PathPropertyChangedHandler));
+    public static readonly DependencyProperty PathProperty = DependencyProperty.Register("Path", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
     public static readonly DependencyProperty ArgsProperty = DependencyProperty.Register("Args", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
     public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), typeof(AppTask), new PropertyMetadata(true));
     public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(AppTask), new PropertyMetadata());
     public static readonly DependencyProperty RunAsAdministratorProperty = DependencyProperty.Register("RunAsAdministrator", typeof(bool), typeof(AppTask), new PropertyMetadata(false));
+    public static readonly DependencyProperty IconPathProperty = DependencyProperty.Register("IconPath", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
 
     /// <summary>
     /// 规定 id 为 -1 时，该对象由 Clone 生成
@@ -43,6 +44,13 @@ public class AppTask : DependencyObject, ICloneable {
         get { return (bool)GetValue(IsEnabledProperty); }
         set { SetValue(IsEnabledProperty, value); }
     }
+    /// <summary>
+    /// 图标路径
+    /// </summary>
+    public string IconPath {
+        get { return (string)GetValue(IconPathProperty); }
+        set { SetValue(IconPathProperty, value); }
+    }
     public ImageSource ImageSource {
         get { return (ImageSource)GetValue(ImageSourceProperty); }
         set { SetValue(ImageSourceProperty, value); }
@@ -53,21 +61,38 @@ public class AppTask : DependencyObject, ICloneable {
         set { SetValue(RunAsAdministratorProperty, value); }
     }
 
-    private static async void PathPropertyChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+    /// <summary>
+    /// 更新图标
+    /// </summary>
+    /// <param name="d"></param>
+    /// <param name="e"></param>
+    private static async void PathAndIconPropertyChangedHandler(DependencyObject d, DependencyPropertyChangedEventArgs e) {
         if (d is not AppTask task) {
             return;
         }
-        if (e.NewValue is string path && File.Exists(path)) {
-            var stream = await Task.Run(() => Utils.GetExeBitmap(path));
-            if (stream == null) {
+        if (e.NewValue is not string path || !File.Exists(path)) {
+            return;
+        }
+        var iconPath = task.IconPath;
+        // 加载图标
+        if (File.Exists(iconPath)) {
+            var iconStream = await task.Dispatcher.InvokeAsync(() => TaskUtils.Try(iconPath.GetImageSource));
+            if (iconStream is not null) {
+                task.ImageSource = iconStream;
                 return;
             }
-            var bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = stream;
-            bitmapImage.EndInit();
-            task.ImageSource = bitmapImage;
         }
+        var tempPath = task.Path;
+        // 从可执行文件加载图标
+        var stream = await Task.Run(() => Utils.GetExeBitmap(tempPath));
+        if (stream == null) {
+            return;
+        }
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.StreamSource = stream;
+        bitmapImage.EndInit();
+        task.ImageSource = bitmapImage;
     }
 
     /// <summary>

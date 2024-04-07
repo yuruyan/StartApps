@@ -63,4 +63,20 @@ public partial class TaskDialog : BaseDialog {
             AppTask.Delay = 0;
         }
     }
+
+    /// <summary>
+    /// 打开图标选择对话框
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OpenIconSelectionDialogMouseUpHandler(object sender, MouseButtonEventArgs e) {
+        e.Handled = true;
+        var dialog = new OpenFileDialog {
+            Filter = "图标文件|*.ico;*.png;*.jpg",
+        };
+        if (dialog.ShowDialog() != true) {
+            return;
+        }
+        AppTask.IconPath = dialog.FileName;
+    }
 }

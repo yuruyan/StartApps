@@ -29,6 +29,10 @@ public class AppTaskPO {
     /// </summary>
     public string Args { get; set; } = string.Empty;
     /// <summary>
+    /// 图标路径
+    /// </summary>
+    public string IconPath { get; set; } = string.Empty;
+    /// <summary>
     /// 是否启用
     /// </summary>
     public bool IsEnabled { get; set; }
