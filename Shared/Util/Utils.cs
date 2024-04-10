@@ -5,6 +5,9 @@ using System.Drawing.Imaging;
 
 namespace Shared.Util;
 
+/// <summary>
+/// Utilities
+/// </summary>
 public static class Utils {
     private static readonly string _ProcessPath = Environment.ProcessPath!;
     private static readonly string _ProcessDirectory = Path.GetDirectoryName(Environment.ProcessPath!)!;

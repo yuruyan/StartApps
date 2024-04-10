@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Shared.Model;
 
 /// <summary>
 /// AppTaskPO
 /// </summary>
-[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class AppTaskPO {
     /// <summary>
     /// Id
@@ -39,6 +37,12 @@ public class AppTaskPO {
     /// <summary>
     /// 以管理员身份运行
     /// </summary>
-    [JsonProperty("runAsAdmin")]
     public bool RunAsAdministrator { get; set; }
 }
+
+/// <summary>
+/// SourceGenerationContext
+/// </summary>
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSerializable(typeof(List<AppTaskPO>))]
+public partial class SourceGenerationContext : JsonSerializerContext { }

@@ -3,7 +3,6 @@ global using CommonTools.Utils;
 global using CommonUITools.Controls;
 global using CommonUITools.Utils;
 global using ModernWpf.Controls;
-global using Newtonsoft.Json;
 global using NLog;
 global using Shared.Model;
 global using Shared.Util;

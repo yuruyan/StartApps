@@ -6,11 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Platforms>x64</Platforms>
+		<PublishAot>true</PublishAot>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Vanara.PInvoke.Kernel32" Version="3.4.16" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\Shared.csproj" />

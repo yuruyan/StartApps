@@ -1,9 +1,10 @@
 ﻿using CommonUITools.Model;
 using StartApp.Widget;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Security.Principal;
+using System.Text.Json;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace StartApp.View;
 
@@ -61,14 +62,16 @@ public partial class MainView : System.Windows.Controls.Page {
     public MainView() {
         CopiedTaskIdList = new List<int>();
         SetValue(AppTasksPropertyKey, new ExtendedObservableCollection<AppTask>());
-        #region 监听 AppTasks 变化
-        AppTasks.CollectionChanged += (_, args) => {
-            HandleDragDropCopyEvent(args);
-            UpdateConfigurationAsync();
-        };
-        #endregion
         InitializeComponent();
-        LoadConfigurationAsync();
+        Dispatcher.InvokeAsync(async () => {
+            await LoadConfigurationAsync();
+            #region 监听 AppTasks 变化
+            AppTasks.CollectionChanged += (_, args) => {
+                HandleDragDropCopyEvent(args);
+                UpdateConfigurationAsync();
+            };
+            #endregion
+        });
         // 等待更新写入完毕
         App.Current.Exit += (_, _) => {
             Visibility = Visibility.Collapsed;
@@ -94,8 +97,8 @@ public partial class MainView : System.Windows.Controls.Page {
         var appTasks = await Task.Run(() => {
             using var file = File.Open(ConfigurationPath, FileMode.OpenOrCreate, FileAccess.Read);
             using var fileReader = new StreamReader(file);
-            return TaskUtils.Try(() => JsonConvert.DeserializeObject<IList<AppTaskPO>>(
-                fileReader.ReadToEnd()
+            return TaskUtils.Try(() => JsonSerializer.Deserialize(
+                fileReader.ReadToEnd(), SourceGenerationContext.Default.ListAppTaskPO
             ));
         });
         if (appTasks != null && appTasks.Count > 0) {
@@ -140,9 +143,12 @@ public partial class MainView : System.Windows.Controls.Page {
             try {
                 await File.WriteAllTextAsync(
                     ConfigurationPath,
-                    JsonConvert.SerializeObject(Dispatcher.Invoke(
-                        () => Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks)
-                    ))
+                    JsonSerializer.Serialize(
+                        Dispatcher.Invoke(
+                            () => Mapper.Instance.Map<IEnumerable<AppTaskPO>>(AppTasks)
+                        ),
+                        SourceGenerationContext.Default.ListAppTaskPO
+                    )
                 );
             } catch (Exception error) {
                 MessageBoxUtils.Error("更新失败");
@@ -278,10 +284,10 @@ public partial class MainView : System.Windows.Controls.Page {
         // 写入配置文件
         try {
             if (normalTasks.Count > 0) {
-                File.WriteAllText(normalConfigPath, JsonConvert.SerializeObject(normalTasks));
+                File.WriteAllText(normalConfigPath, JsonSerializer.Serialize(normalTasks, SourceGenerationContext.Default.ListAppTaskPO));
             }
             if (adminTasks.Count > 0) {
-                File.WriteAllText(adminConfigPath, JsonConvert.SerializeObject(adminTasks));
+                File.WriteAllText(adminConfigPath, JsonSerializer.Serialize(adminTasks, SourceGenerationContext.Default.ListAppTaskPO));
             }
         } catch (Exception error) {
             MessageBoxUtils.Error("写入临时文件失败");
