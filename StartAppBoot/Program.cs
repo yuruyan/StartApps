@@ -43,8 +43,9 @@ void Run() {
             try {
                 Process.Start(new ProcessStartInfo {
                     FileName = item.Path,
-                    Arguments = item.Args,
-                    UseShellExecute = true,
+                    Arguments = item.Args ?? string.Empty,
+                    UseShellExecute = false,
+                    WorkingDirectory = item.StartLocation ?? string.Empty,
                 });
             } catch (Exception error) {
                 Logger.LogError(error, "Failed to start process '{Name}'", item.Name);
