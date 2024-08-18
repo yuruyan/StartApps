@@ -41,4 +41,8 @@ public class AppTaskPO {
     /// </summary>
     [JsonProperty("runAsAdmin")]
     public bool RunAsAdministrator { get; set; }
+    /// <summary>
+    /// 启动位置
+    /// </summary>
+    public string StartLocation { get; set; } = string.Empty;
 }

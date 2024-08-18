@@ -66,6 +66,12 @@
       </StackPanel>
       <StackPanel>
         <Grid Style="{StaticResource HeaderPanel}">
+          <TextBlock Text="启动目录" />
+        </Grid>
+        <TextBox Text="{Binding AppTask.StartLocation}" />
+      </StackPanel>
+      <StackPanel>
+        <Grid Style="{StaticResource HeaderPanel}">
           <TextBlock
             HorizontalAlignment="Left"
             MouseUp="OpenIconSelectionDialogMouseUpHandler"

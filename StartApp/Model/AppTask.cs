@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json.Serialization;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace StartApp.Model;
 
@@ -16,6 +15,7 @@ public class AppTask : DependencyObject, ICloneable {
     public static readonly DependencyProperty ImageSourceProperty = DependencyProperty.Register("ImageSource", typeof(ImageSource), typeof(AppTask), new PropertyMetadata());
     public static readonly DependencyProperty RunAsAdministratorProperty = DependencyProperty.Register("RunAsAdministrator", typeof(bool), typeof(AppTask), new PropertyMetadata(false));
     public static readonly DependencyProperty IconPathProperty = DependencyProperty.Register("IconPath", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
+    public static readonly DependencyProperty StartLocationProperty = DependencyProperty.Register("StartLocation", typeof(string), typeof(AppTask), new PropertyMetadata(string.Empty));
 
     /// <summary>
     /// 规定 id 为 -1 时，该对象由 Clone 生成
@@ -59,6 +59,13 @@ public class AppTask : DependencyObject, ICloneable {
     public bool RunAsAdministrator {
         get { return (bool)GetValue(RunAsAdministratorProperty); }
         set { SetValue(RunAsAdministratorProperty, value); }
+    }
+    /// <summary>
+    /// 启动位置
+    /// </summary>
+    public string StartLocation {
+        get { return (string)GetValue(StartLocationProperty); }
+        set { SetValue(StartLocationProperty, value); }
     }
 
     /// <summary>

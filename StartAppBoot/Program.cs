@@ -38,8 +38,9 @@ foreach (var item in appTasks) {
         try {
             Process.Start(new ProcessStartInfo {
                 FileName = item.Path,
-                Arguments = item.Args,
-                UseShellExecute = true,
+                Arguments = item.Args ?? string.Empty,
+                UseShellExecute = false,
+                WorkingDirectory = item.StartLocation ?? string.Empty,
             });
         } catch (Exception error) {
             Logger.Error(error);
