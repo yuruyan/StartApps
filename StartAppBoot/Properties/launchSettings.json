@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StartAppBoot": {
+      "commandName": "Project",
+      "commandLineArgs": "\"F:\\Installed\\StartApp\\tmpw1zsgp.tmp\""
+    }
+  }
+}

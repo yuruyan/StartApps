@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json.Serialization;
 using System.Windows.Media;
 
 namespace StartApp.Model;
 
-[JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy))]
 public class AppTask : DependencyObject, ICloneable {
     public static readonly DependencyProperty IdProperty = DependencyProperty.Register("Id", typeof(int), typeof(AppTask), new PropertyMetadata(0));
     public static readonly DependencyProperty DelayProperty = DependencyProperty.Register("Delay", typeof(int), typeof(AppTask), new PropertyMetadata(0));
@@ -55,7 +53,6 @@ public class AppTask : DependencyObject, ICloneable {
         get { return (ImageSource)GetValue(ImageSourceProperty); }
         set { SetValue(ImageSourceProperty, value); }
     }
-    [JsonProperty("runAsAdmin")]
     public bool RunAsAdministrator {
         get { return (bool)GetValue(RunAsAdministratorProperty); }
         set { SetValue(RunAsAdministratorProperty, value); }
