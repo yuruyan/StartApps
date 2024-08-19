@@ -79,4 +79,22 @@ public partial class TaskDialog : BaseDialog {
         }
         AppTask.IconPath = dialog.FileName;
     }
+
+    /// <summary>
+    /// 打开文件夹选择对话框
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OpenFolderSelectionDialogMouseUpHandler(object sender, MouseButtonEventArgs e) {
+        e.Handled = true;
+        var dialog = new OpenFolderDialog();
+        // 设置文件夹路径
+        if (Directory.Exists(AppTask.StartLocation)) {
+            dialog.InitialDirectory = new DirectoryInfo(AppTask.StartLocation).FullName;
+        }
+        if (dialog.ShowDialog() != true) {
+            return;
+        }
+        AppTask.StartLocation = dialog.FolderName;
+    }
 }
