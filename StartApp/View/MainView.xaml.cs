@@ -1,4 +1,4 @@
-﻿using CommonUITools.Model;
+using CommonUITools.Model;
 using StartApp.Widget;
 using System.Collections.Specialized;
 using System.Security.Principal;
@@ -102,7 +102,8 @@ public partial class MainView : System.Windows.Controls.Page {
             ));
         });
         if (appTasks != null && appTasks.Count > 0) {
-            AppTasks.AddRange(Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks));
+            // 注册已加载任务的 Id，避免后续粘贴/新增/拖拽复制时与现有任务 Id 重复
+            AppTasks.AddRange(Mapper.Instance.Map<IEnumerable<AppTask>>(appTasks).Select(CheckAndSetTaskId));
         }
     }
 
@@ -506,6 +507,11 @@ public partial class MainView : System.Windows.Controls.Page {
     private void EnableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
         e.Handled = true;
         if (sender is FrameworkElement element) {
+            // 无选中项：不应显示启用/禁用操作
+            if (AppTaskListBox.SelectedItems.Count == 0) {
+                element.Visibility = Visibility.Collapsed;
+                return;
+            }
             // 全部 enabled
             if (GetSelectedItemsEnableState() == SelectedItemsEnableState.AllEnabled) {
                 element.Visibility = Visibility.Collapsed;
@@ -529,6 +535,11 @@ public partial class MainView : System.Windows.Controls.Page {
     private void DisableTaskMenuItemLoaded(object sender, RoutedEventArgs e) {
         e.Handled = true;
         if (sender is FrameworkElement element) {
+            // 无选中项：不应显示启用/禁用操作
+            if (AppTaskListBox.SelectedItems.Count == 0) {
+                element.Visibility = Visibility.Collapsed;
+                return;
+            }
             // 全部 disabled
             if (GetSelectedItemsEnableState() == SelectedItemsEnableState.AllDisabled) {
                 element.Visibility = Visibility.Collapsed;
